@@ -27,8 +27,19 @@ int recognize_line(ExecutionContext *c, char *line) {
 
     printf("## %s\n", constante);
 
-    // sei que a contante nao precisava do context_get, mas quis exemplificar 
+    /*
+      vai pegar o contexto da variavel e salvar em registrador_pilha
+      Exemplo :
+
+        variavel_pilha = "vi3"
+        retorno em registrador_pilha => -4(%rbp)
+
+      com esse retorno a gente so precisa montar o comando assembly
+    */
+   
     context_get(c, variavel_pilha, registrador_pilha);
+
+    // sei que a contante nao precisava do context_get, mas quis exemplificar 
     context_get(c, constante, constante_value);
 
     printf("movl %s, %s\n", constante_value, registrador_pilha);

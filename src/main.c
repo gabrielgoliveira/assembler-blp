@@ -21,10 +21,10 @@ int is_function_declaration(char *str) {
   int n_match = sscanf(str, standard, &id_function, &type_param1, &index_param1, &type_param2, &index_param2, &type_param3, &index_param3);
  
   if(n_match == 0) {
-    return 0;
+    return -1;
   }
   
-  return 1;
+  return id_function;
 }
 
 
@@ -33,6 +33,7 @@ int main() {
   
   int length = 256;
   int flag = 0, scope_def_locals_var = 0;
+  int id_function = 0, temp = 0;
   char line[length];
 
   char* env_verbose = getenv("verbose");
@@ -48,9 +49,10 @@ int main() {
 
   while (fgets(line, length, stdin) != NULL) {
     // if(is_verbose) printf("# line : %s\n", line);
-
-    if(is_function_declaration(line)) {
+    temp = is_function_declaration(line);
+    if(temp != -1) {
       // cria o contexto
+      id_function = temp;
       context_create(&context);
     
       scope_def_locals_var = 0;
@@ -60,7 +62,7 @@ int main() {
 
       if(is_verbose) {
         // mostra registradores alocados
-        context_print_params(&context);
+        // context_print_params(&context);
         // print_struct(&context);
       }
 
@@ -79,9 +81,15 @@ int main() {
       // if(is_verbose) printf("# =========== Finalizando escopo para definicao de variaveis ==========\n");
       scope_def_locals_var = 0;
       
+      printf(".globl f%d\nf%d:\n", id_function, id_function);
+      printf("pushq %%rbp\n");
+      printf("movq  %%rsp, %%rbp\n");
+      printf("subq X\n");
+
       // imprime o que foi alocado
       if(is_verbose) {
-        // context_print_params(&context);
+        printf("# registradores e variaveis alocados :\n");
+        context_print_params(&context);
         context_print_vlocal_regs(&context);
         context_print_vlocal_stack(&context);
         // print_struct(&context);
@@ -99,13 +107,13 @@ int main() {
     int r = -1;
     r = recognize_line(&context, line);
 
-    if(!flag && r == -1) {
-      printf("============================================\n");
-      printf("Error: -1\n");
-      printf("Diretitva nao reconhecida : %s\n", line);
-      printf("============================================\n");
-      //return 0;
-    }
+    // if(!flag && r == -1) {
+    //   printf("============================================\n");
+    //   printf("Error: -1\n");
+    //   printf("Diretitva nao reconhecida : %s\n", line);
+    //   printf("============================================\n");
+    //   //return 0;
+    // }
   }
 
   return 0;

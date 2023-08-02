@@ -92,7 +92,7 @@ int _indexof(int *arr, int len, int value) {
 }
 
 void context_get(ExecutionContext* c, char *str, char *dest) {
-  printf("### LINE : %s\n", str);
+  // printf("### LINE : %s\n", str);
   if(c->init != 1) {
     printf("Erro: Estrutura nao alocada\n");
   }
@@ -156,8 +156,8 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
 
   if(sscanf(str, CONSTANT_FORMAT, &index) == 1) {
     // printf("%d\n", index);
-    printf("## str %s\n", str);
-    printf("## indice %d\n", index);
+    // printf("## str %s\n", str);
+    // printf("## indice %d\n", index);
     char number_str[20] = "";
     sprintf(number_str, "%d", index);
     strcpy(dest, number_str);
