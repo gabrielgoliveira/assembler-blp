@@ -9,12 +9,12 @@
 
 int recognize_line(ExecutionContext *c, char *line) {
   // vi1 = ci1
-  char value[5];
+
   int index_1, index_2;
   int r = sscanf(line, "vi%d = ci%d", &index_1, &index_2);
 
   // atribuicao de contante para variavel de pilha
-  if(r) {
+  if(r == 2) {
     char variavel_pilha[10];
     char constante[10];
 
@@ -37,5 +37,5 @@ int recognize_line(ExecutionContext *c, char *line) {
     return 1;
   }
 
-  return 0;
+  return -1;
 }
