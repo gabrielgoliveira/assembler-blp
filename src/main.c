@@ -72,10 +72,10 @@ int main() {
       // if(is_verbose) printf("# ========== Criando escopo para definicao de variaveis ============\n");
       scope_def_locals_var = 1;
 
-      if(is_verbose) {
-        // mostra registradores alocados
-        context_print_params(&context);
-      }
+      // if(is_verbose) {
+      //   // mostra registradores alocados
+      //   context_print_params(&context);
+      // }
       
       continue;
     }
