@@ -8,8 +8,7 @@ var vi5
 reg ri6
 enddef
 
-vi1 = ci1
-ri2 = vi1 
+vi3 = ci-110
 
 return ci5
 end

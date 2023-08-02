@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "./execution-context/execution_context.h"
+#include "./interpreter/interpreter.h"
 #include "./constants/formats.h"
 int is_verbose = 0;
 
@@ -95,7 +96,10 @@ int main() {
       continue;
     }
 
-    if(!flag) {
+    int r = -1;
+    r = recognize_line(&context, line);
+
+    if(!flag && r == -1) {
       printf("============================================\n");
       printf("Error: -1\n");
       printf("Diretitva nao reconhecida : %s\n", line);

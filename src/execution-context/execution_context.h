@@ -25,7 +25,7 @@ void context_alloc(ExecutionContext* c, char *str);
 int _indexof(int *arr, int len, int value);
 
 // recupera o contexto de uma variavel
-void context_get(ExecutionContext* c, char *str);
+void context_get(ExecutionContext* c, char *str, char *dest);
 
 // retorna o tamanho de um parametro em bytes
 int _get_size_param(char p);

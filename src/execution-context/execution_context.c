@@ -2,6 +2,7 @@
 #include "./execution_context.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /*
   Como temos apenas 4 variaveis de registrador,
@@ -90,7 +91,8 @@ int _indexof(int *arr, int len, int value) {
   return -1;
 }
 
-void context_get(ExecutionContext* c, char *str) {
+void context_get(ExecutionContext* c, char *str, char *dest) {
+  printf("### LINE : %s\n", str);
   if(c->init != 1) {
     printf("Erro: Estrutura nao alocada\n");
   }
@@ -106,8 +108,10 @@ void context_get(ExecutionContext* c, char *str) {
 
     int pos_stack = (pos+1) * 4;
 
-    printf("%d(%%rbp)\n", pos_stack); 
-
+    // printf("%d(%%rbp)\n", pos_stack); 
+    char stack_str[20];
+    snprintf(stack_str, sizeof(stack_str), "%d(%%rbp)", pos_stack);
+    strcpy(dest, stack_str);
     return ;
   }
 
@@ -124,20 +128,24 @@ void context_get(ExecutionContext* c, char *str) {
     case 0:
       // r11
       break;
-      printf("%%r11\n");
+      // printf("%%r11\n");
+      strcpy(dest, "%%r11");
     case 1:
       // r10
-      printf("%%r10\n");
+      // printf("%%r10\n");
+      strcpy(dest, "%%r10");
       break;
       
     case 2:
        // r9
-      printf("%%r9\n");
+      // printf("%%r9\n");
+      strcpy(dest, "%%r9");
       break;
     
     case 3:
        // r8
-      printf("%%r8\n");
+      // printf("%%r8\n");
+      strcpy(dest, "%%r8");
       break;
     
     default:
@@ -147,7 +155,12 @@ void context_get(ExecutionContext* c, char *str) {
   }
 
   if(sscanf(str, CONSTANT_FORMAT, &index) == 1) {
-    printf("%d\n", index);
+    // printf("%d\n", index);
+    printf("## str %s\n", str);
+    printf("## indice %d\n", index);
+    char number_str[20] = "";
+    sprintf(number_str, "%d", index);
+    strcpy(dest, number_str);
   }
 
   // implementar array
