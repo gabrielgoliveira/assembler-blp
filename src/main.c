@@ -60,9 +60,13 @@ int main() {
       // aloca parametros nos registradores
       alloc_params(&context, line);
 
+      printf(".globl f%d\nf%d:\n", id_function, id_function);
+      printf("pushq %%rbp\n");
+      printf("movq  %%rsp, %%rbp\n");
+
       if(is_verbose) {
         // mostra registradores alocados
-        // context_print_params(&context);
+        context_print_params(&context);
         // print_struct(&context);
       }
 
@@ -81,9 +85,7 @@ int main() {
       // if(is_verbose) printf("# =========== Finalizando escopo para definicao de variaveis ==========\n");
       scope_def_locals_var = 0;
       
-      printf(".globl f%d\nf%d:\n", id_function, id_function);
-      printf("pushq %%rbp\n");
-      printf("movq  %%rsp, %%rbp\n");
+      // aloca a pilha
       printf("subq X\n");
 
       // imprime o que foi alocado
