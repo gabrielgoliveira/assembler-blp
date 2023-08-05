@@ -12,7 +12,7 @@ int recognize_line(ExecutionContext *c, char *line) {
 
   int index_1, index_2;
   int r = sscanf(line, "vi%d = ci%d", &index_1, &index_2);
-
+  
   // atribuicao de contante para variavel de pilha
   if(r == 2) {
     char variavel_pilha[10];
@@ -47,6 +47,28 @@ int recognize_line(ExecutionContext *c, char *line) {
 
     return 1;
   }
+
+  //retorno de constante
+  r = sscanf(line, "return ci%d", &index_1);
+
+  if(r == 1){
+    printf("movl $%d, %%eax\n", index_1);
+    printf("leave\nret\n");
+    return 1;
+  }
+  //retorno variável
+  char variavel_retorno[3];
+
+  r = sscanf(line, "return %c%c%c", &variavel_retorno[0],&variavel_retorno[1],&variavel_retorno[2]);
+  if(r == 3){
+    char registrador_pilha[10] = "";
+    context_get(c, variavel_retorno, registrador_pilha);
+    printf("movl -%s, %%eax\n", registrador_pilha);
+    printf("leave\nret\n");
+    return 1;
+  }
+
+
 
   return -1;
 }
