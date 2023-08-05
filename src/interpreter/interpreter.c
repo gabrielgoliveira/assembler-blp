@@ -67,6 +67,34 @@ int recognize_line(ExecutionContext *c, char *line) {
     printf("leave\nret\n");
     return 1;
   }
+  char if_primeiro[3], if_segundo[3], comparacao[2];
+  r = sscanf(line, "if %s %s %s", if_primeiro, comparacao, if_segundo);
+  if(r == 3){
+    char registrador_pilha[10] = "";
+    char registrador_pilha2[10] = "";
+    context_get(c, if_primeiro, registrador_pilha);
+    context_get(c, if_segundo, registrador_pilha2);
+    printf("cmpl -%s, -%s\n", registrador_pilha, registrador_pilha2);
+    if(!strcmp(comparacao, "eq")){
+      printf("je end_inf\n");
+    }
+    if(!strcmp(comparacao, "ne")){
+      printf("jne end_inf\n");
+    }
+    if(!strcmp(comparacao, "lt")){
+      printf("jl end_inf\n");
+    }
+    if(!strcmp(comparacao, "le")){
+      printf("jle end_inf\n");
+    }
+    if(!strcmp(comparacao, "gt")){
+      printf("jg end_inf\n");
+    }
+    if(!strcmp(comparacao, "ge")){
+      printf("jge end_inf\n");
+    }
+  }
+
 
 
 
