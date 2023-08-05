@@ -67,6 +67,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     printf("leave\nret\n");
     return 1;
   }
+  //IF
   char if_primeiro[3], if_segundo[3], comparacao[2];
   r = sscanf(line, "if %s %s %s", if_primeiro, comparacao, if_segundo);
   if(r == 3){
