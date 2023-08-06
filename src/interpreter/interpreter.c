@@ -9,42 +9,49 @@
 
 int recognize_line(ExecutionContext *c, char *line) {
   // vi1 = ci1
-
   int index_1, index_2;
-  int r = sscanf(line, "vi%d = ci%d", &index_1, &index_2);
+  char atr_c0, atr_c1, atr_c2, atr_cop, atr_c3, atr_c4;
+  int atr_i0, atr_i1, atr_i2;
+  int r = sscanf(line, "v%c%d = %c%c%d %c %c%c%d", &atr_c0, &atr_i0, &atr_c1, &atr_c2, &atr_i1, &atr_cop, &atr_c3, &atr_c4, &atr_i2);
   
-  // atribuicao de contante para variavel de pilha
-  if(r == 2) {
+  // atribuicao simples
+  if(r = 5) {
     char variavel_pilha[10];
+    char variavel_pilha2[10];
     char constante[10];
-
-    // monta a string vi%d, basicamente concatena vi com o seu indice
-    sprintf(variavel_pilha, "vi%d", index_1);
-    sprintf(constante, "ci%d", index_2);
-
     char registrador_pilha[10] = "";
+    char registrador_pilha2[10] = "";
     char constante_value[10] = "";
 
-    printf("## %s\n", constante);
+    //variavel inteira
+    if(atr_c0 == 'i') {
+      sprintf(variavel_pilha, "v%c%d", atr_c0, atr_i0);
 
-    /*
-      vai pegar o contexto da variavel e salvar em registrador_pilha
-      Exemplo :
-
-        variavel_pilha = "vi3"
-        retorno em registrador_pilha => -4(%rbp)
-
-      com esse retorno a gente so precisa montar o comando assembly
-    */
-   
-    context_get(c, variavel_pilha, registrador_pilha);
-
-    // sei que a contante nao precisava do context_get, mas quis exemplificar 
-    context_get(c, constante, constante_value);
-
-    printf("movl %s, %s\n", constante_value, registrador_pilha);
-    // printf("movl %d, %s\n", index_2, registrador_pilha);
-
+      //constante
+      if(atr_c1 == 'c') {
+        sprintf(constante, "ci%d", atr_c1);
+        printf("## %s\n", constante);
+        context_get(c, variavel_pilha, registrador_pilha);
+        context_get(c, constante, constante_value);
+        printf("movl %s, %s\n", constante_value, registrador_pilha);
+      }else {
+        //variavel inteira
+        if(atr_c2 == 'i') {
+          sprintf(variavel_pilha2, "vi%d", atr_i1);
+          printf("## %s\n", variavel_pilha2);
+          context_get(c, variavel_pilha, registrador_pilha);
+          context_get(c, variavel_pilha2, registrador_pilha2);
+          printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
+        }else {
+          //registrador
+          sprintf(variavel_pilha2, "vr%d", atr_i1);
+          printf("## %s\n", variavel_pilha2);
+          context_get(c, variavel_pilha, registrador_pilha);
+          context_get(c, variavel_pilha2, registrador_pilha2);
+          printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
+        }
+      }
+    }
     return 1;
   }
 
@@ -95,9 +102,6 @@ int recognize_line(ExecutionContext *c, char *line) {
       printf("jge end_inf\n");
     }
   }
-
-
-
 
   return -1;
 }
