@@ -16,12 +16,12 @@ int recognize_line(ExecutionContext *c, char *line) {
   
   // atribuicao simples
   if(r = 5) {
-    char variavel_pilha[10];
-    char variavel_pilha2[10];
-    char constante[10];
-    char registrador_pilha[10] = "";
-    char registrador_pilha2[10] = "";
-    char constante_value[10] = "";
+    char variavel_pilha[20];
+    char variavel_pilha2[20];
+    char constante[20];
+    char registrador_pilha[20] = "";
+    char registrador_pilha2[20] = "";
+    char constante_value[20] = "";
 
     //variavel inteira
     if(atr_c0 == 'i') {
@@ -29,7 +29,7 @@ int recognize_line(ExecutionContext *c, char *line) {
 
       //constante
       if(atr_c1 == 'c') {
-        sprintf(constante, "ci%d", atr_c1);
+        sprintf(constante, "ci%d", atr_i1);
         printf("## %s\n", constante);
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, constante, constante_value);

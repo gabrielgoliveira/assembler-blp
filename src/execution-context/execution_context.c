@@ -110,7 +110,7 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
 
     // printf("%d(%%rbp)\n", pos_stack); 
     char stack_str[20];
-    snprintf(stack_str, sizeof(stack_str), "%d(%%rbp)", pos_stack);
+    snprintf(stack_str, sizeof(stack_str), "-%d(%%rbp)", pos_stack);
     strcpy(dest, stack_str);
     return ;
   }
