@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdint.h>
 
+int contador_ifs = 0;
+void chamada_de_funcao(ExecutionContext *c, char *p1);
 
 int recognize_line(ExecutionContext *c, char *line) {
   // vi1 = ci1
@@ -72,7 +74,7 @@ int recognize_line(ExecutionContext *c, char *line) {
   if(r == 3){
     char registrador_pilha[10] = "";
     context_get(c, variavel_retorno, registrador_pilha);
-    printf("movl -%s, %%eax\n", registrador_pilha);
+    printf("movl %s, %%eax\n", registrador_pilha);
     printf("leave\nret\n");
     return 1;
   }
@@ -84,27 +86,82 @@ int recognize_line(ExecutionContext *c, char *line) {
     char registrador_pilha2[10] = "";
     context_get(c, if_primeiro, registrador_pilha);
     context_get(c, if_segundo, registrador_pilha2);
+    
     printf("cmpl %s, %s\n", registrador_pilha, registrador_pilha2);
     if(!strcmp(comparacao, "eq")){
-      printf("jne end_inf\n");
+      printf("jne end_inf");
     }
     if(!strcmp(comparacao, "ne")){
-      printf("je end_inf\n");
+      printf("je end_inf");
     }
     if(!strcmp(comparacao, "lt")){
-      printf("jge end_inf\n");
+      printf("jge end_inf");
     }
     if(!strcmp(comparacao, "le")){
-      printf("jg end_inf\n");
+      printf("jg end_inf");
     }
     if(!strcmp(comparacao, "gt")){
-      printf("jle end_inf\n");
+      printf("jle end_inf");
     }
     if(!strcmp(comparacao, "ge")){
-      printf("jl end_inf\n");
+      printf("jl end_inf");
     }
+    contador_ifs++;
+    printf("%d\n", contador_ifs);
     return 1;
+  }
+  
+  //ENDIF
+  if(!strcmp(line, "endif\n")){
+    printf("end_if%d:\n", contador_ifs);
+    return 1;
+  }
+  int num_func, num_var;
+  char tipo_variavel;
+  char primeiro_param_func[3];
+  char segundo_param_func[3];
+  char terceiro_param_func[3];
+  char registrador_pilha[10] = "";
+  //CHAMADA DE FUNÇÃO
+  r = sscanf(line, "v%c%d = call f%d %s %s %s", &tipo_variavel, &num_var, &num_func, primeiro_param_func, segundo_param_func, terceiro_param_func);
+
+  if(r >= 3){
+    char variavel_recebe[4] = "";
+    sprintf(variavel_recebe, "v%c%d", tipo_variavel, num_var);
+    
+    if(r >= 4){
+      chamada_de_funcao(c,primeiro_param_func);
+      printf("%%rdi\n");
+    }
+    if(r >=5){
+      chamada_de_funcao(c,segundo_param_func);
+      printf("%%rsi\n");
+    }
+    if(r == 6){
+      chamada_de_funcao(c,terceiro_param_func);
+      printf("%%rdx\n");
+    }
+
+    context_get(c, variavel_recebe, registrador_pilha);
+    printf("movl %%eax, %s\n", registrador_pilha);
   }
 
   return -1;
 }
+
+void chamada_de_funcao(ExecutionContext *c, char *p1){
+  char registrador_constante[10] = "";
+  
+  if(p1[0] == 'c'){
+    context_get(c, p1, registrador_constante);
+    printf("movl $%s, ", registrador_constante);
+    return;
+  }
+
+  context_get(c, p1, registrador_constante);
+  printf("movl %s, ", registrador_constante);
+}
+
+
+
+
