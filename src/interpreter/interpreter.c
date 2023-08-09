@@ -15,7 +15,7 @@ int recognize_line(ExecutionContext *c, char *line) {
   int r = sscanf(line, "v%c%d = %c%c%d %c %c%c%d", &atr_c0, &atr_i0, &atr_c1, &atr_c2, &atr_i1, &atr_cop, &atr_c3, &atr_c4, &atr_i2);
   
   // atribuicao simples
-  if(r = 5) {
+  if(r == 5) {
     char variavel_pilha[20];
     char variavel_pilha2[20];
     char constante[20];
@@ -26,7 +26,6 @@ int recognize_line(ExecutionContext *c, char *line) {
     //variavel inteira
     if(atr_c0 == 'i') {
       sprintf(variavel_pilha, "v%c%d", atr_c0, atr_i0);
-
       //constante
       if(atr_c1 == 'c') {
         sprintf(constante, "ci%d", atr_i1);
@@ -34,6 +33,7 @@ int recognize_line(ExecutionContext *c, char *line) {
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, constante, constante_value);
         printf("movl %s, %s\n", constante_value, registrador_pilha);
+        return 1;
       }else {
         //variavel inteira
         if(atr_c2 == 'i') {
@@ -42,6 +42,7 @@ int recognize_line(ExecutionContext *c, char *line) {
           context_get(c, variavel_pilha, registrador_pilha);
           context_get(c, variavel_pilha2, registrador_pilha2);
           printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
+          return 1;
         }else {
           //registrador
           sprintf(variavel_pilha2, "vr%d", atr_i1);
@@ -49,10 +50,11 @@ int recognize_line(ExecutionContext *c, char *line) {
           context_get(c, variavel_pilha, registrador_pilha);
           context_get(c, variavel_pilha2, registrador_pilha2);
           printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
+          return 1;
         }
       }
     }
-    return 1;
+    
   }
 
   //retorno de constante
@@ -82,25 +84,26 @@ int recognize_line(ExecutionContext *c, char *line) {
     char registrador_pilha2[10] = "";
     context_get(c, if_primeiro, registrador_pilha);
     context_get(c, if_segundo, registrador_pilha2);
-    printf("cmpl -%s, -%s\n", registrador_pilha, registrador_pilha2);
+    printf("cmpl %s, %s\n", registrador_pilha, registrador_pilha2);
     if(!strcmp(comparacao, "eq")){
-      printf("je end_inf\n");
-    }
-    if(!strcmp(comparacao, "ne")){
       printf("jne end_inf\n");
     }
+    if(!strcmp(comparacao, "ne")){
+      printf("je end_inf\n");
+    }
     if(!strcmp(comparacao, "lt")){
-      printf("jl end_inf\n");
-    }
-    if(!strcmp(comparacao, "le")){
-      printf("jle end_inf\n");
-    }
-    if(!strcmp(comparacao, "gt")){
-      printf("jg end_inf\n");
-    }
-    if(!strcmp(comparacao, "ge")){
       printf("jge end_inf\n");
     }
+    if(!strcmp(comparacao, "le")){
+      printf("jg end_inf\n");
+    }
+    if(!strcmp(comparacao, "gt")){
+      printf("jle end_inf\n");
+    }
+    if(!strcmp(comparacao, "ge")){
+      printf("jl end_inf\n");
+    }
+    return 1;
   }
 
   return -1;

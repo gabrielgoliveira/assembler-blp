@@ -107,7 +107,9 @@ int main() {
     }
 
     int r = -1;
+    //printf("OI1\n");
     r = recognize_line(&context, line);
+    //printf("OI2\n");
 
     // if(!flag && r == -1) {
     //   printf("============================================\n");
