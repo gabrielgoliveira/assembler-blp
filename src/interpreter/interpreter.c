@@ -185,6 +185,15 @@ int recognize_line(ExecutionContext *c, char *line) {
     printf("movl %%eax, %s\n", registrador_pilha);
   }
 
+  //Operacoes GET TO
+  char tipo_da_variavel, tipo_variavel_destino;
+  int num_da_variavel, num_do_index, num_da_variavel_destino;
+
+  r = sscanf(line, "get v%c%d index ci%d to %ci%d", &tipo_da_variavel, &num_da_variavel, &num_do_index, &tipo_variavel_destino, &num_da_variavel_destino);
+  if(r == 5){
+
+  }
+
   return -1;
 }
 
