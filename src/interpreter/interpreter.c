@@ -13,18 +13,18 @@ int recognize_line(ExecutionContext *c, char *line) {
   int index_1, index_2;
   char atr_c0, atr_c1, atr_c2, atr_cop, atr_c3, atr_c4;
   int atr_i0, atr_i1, atr_i2;
-  char variavel_pilha[20];
-  char variavel_pilha2[20];
-  char constante[20];
-  char parametro[20];
-  char registrador_pilha[20] = "";
-  char registrador_pilha2[20] = "";
-  char constante_value[20] = "";
-  char parametro_value[20] = "";
   int r = sscanf(line, "v%c%d = %c%c%d %c %c%c%d", &atr_c0, &atr_i0, &atr_c1, &atr_c2, &atr_i1, &atr_cop, &atr_c3, &atr_c4, &atr_i2);
 
   // atribuicao simples
   if(r == 5) {
+    char variavel_pilha[20];
+    char variavel_pilha2[20];
+    char constante[20];
+    char parametro[20];
+    char registrador_pilha[20] = "";
+    char registrador_pilha2[20] = "";
+    char constante_value[20] = "";
+    char parametro_value[20] = "";
     //variavel inteira
     if(atr_c0 == 'i') {
       sprintf(variavel_pilha, "v%c%d", atr_c0, atr_i0);
@@ -34,7 +34,7 @@ int recognize_line(ExecutionContext *c, char *line) {
         printf("## %s\n", constante);
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, constante, constante_value);
-        printf("movl %s, %s\n", constante_value, registrador_pilha);
+        printf("movl $%s, %s\n", constante_value, registrador_pilha);
         return 1;
       }
       else if(atr_c1 == 'p') {
@@ -126,7 +126,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     context_get(c, if_primeiro, registrador_pilha);
     context_get(c, if_segundo, registrador_pilha2);
     
-    printf("cmpl %s, %s\n", registrador_pilha, registrador_pilha2);
+    printf("cmpl %s, %s\n", registrador_pilha2, registrador_pilha);
     if(!strcmp(comparacao, "eq")){
       printf("jne end_inf");
     }
