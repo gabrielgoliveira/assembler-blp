@@ -21,9 +21,11 @@ int recognize_line(ExecutionContext *c, char *line) {
     char variavel_pilha[20];
     char variavel_pilha2[20];
     char constante[20];
+    char parametro[20];
     char registrador_pilha[20] = "";
     char registrador_pilha2[20] = "";
     char constante_value[20] = "";
+    char parametro_value[20] = "";
 
     //variavel inteira
     if(atr_c0 == 'i') {
@@ -35,6 +37,15 @@ int recognize_line(ExecutionContext *c, char *line) {
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, constante, constante_value);
         printf("movl %s, %s\n", constante_value, registrador_pilha);
+        return 1;
+      }
+      else if(atr_c1 == 'p') {
+        //parametro
+        sprintf(parametro, "pi%d", atr_i1);
+        printf("## %s\n", parametro);
+        context_get(c, variavel_pilha, registrador_pilha);
+        context_get(c, parametro, parametro_value);
+        printf("movl %s, %s\n", parametro_value, registrador_pilha);
         return 1;
       }else {
         //variavel inteira
