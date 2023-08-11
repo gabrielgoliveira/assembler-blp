@@ -70,6 +70,15 @@ int recognize_line(ExecutionContext *c, char *line) {
     
   }
 
+  //Operações
+  if(r == 9){
+    //adicao
+    //subtracao
+    //multiplicacao
+    //divisao
+  }
+    
+
   //retorno de constante
   r = sscanf(line, "return ci%d", &index_1);
 
