@@ -10,23 +10,21 @@ int contador_ifs = 0;
 void chamada_de_funcao(ExecutionContext *c, char *p1);
 
 int recognize_line(ExecutionContext *c, char *line) {
-  // vi1 = ci1
   int index_1, index_2;
   char atr_c0, atr_c1, atr_c2, atr_cop, atr_c3, atr_c4;
   int atr_i0, atr_i1, atr_i2;
+  char variavel_pilha[20];
+  char variavel_pilha2[20];
+  char constante[20];
+  char parametro[20];
+  char registrador_pilha[20] = "";
+  char registrador_pilha2[20] = "";
+  char constante_value[20] = "";
+  char parametro_value[20] = "";
   int r = sscanf(line, "v%c%d = %c%c%d %c %c%c%d", &atr_c0, &atr_i0, &atr_c1, &atr_c2, &atr_i1, &atr_cop, &atr_c3, &atr_c4, &atr_i2);
-  
+
   // atribuicao simples
   if(r == 5) {
-    char variavel_pilha[20];
-    char variavel_pilha2[20];
-    char constante[20];
-    char parametro[20];
-    char registrador_pilha[20] = "";
-    char registrador_pilha2[20] = "";
-    char constante_value[20] = "";
-    char parametro_value[20] = "";
-
     //variavel inteira
     if(atr_c0 == 'i') {
       sprintf(variavel_pilha, "v%c%d", atr_c0, atr_i0);
@@ -57,7 +55,7 @@ int recognize_line(ExecutionContext *c, char *line) {
           printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
           return 1;
         }else {
-          //registrador
+          //registrador, verificar essa parte ainda
           sprintf(variavel_pilha2, "vr%d", atr_i1);
           printf("## %s\n", variavel_pilha2);
           context_get(c, variavel_pilha, registrador_pilha);
@@ -67,18 +65,39 @@ int recognize_line(ExecutionContext *c, char *line) {
         }
       }
     }
-    
   }
-
+ /* 
+  Falta adaptar esse código para nosso trabalho (código de trabalho anterior)
   //Operações
   if(r == 9){
-    //adicao
-    //subtracao
-    //multiplicacao
-    //divisao
-  }
-    
+    switch(atr_cop){
+      case '+':
+        printf("addl %s, %%eax\n", y);
+        break;
+      case '-':
+        printf("subl %s, %%eax\n", y);
+        break;
+      case '*':
+        printf("imull %s, %%eax\n", y);
+        break;
+      case '/':
+        // Como em BPL somente o tipo signed int pode ser operado, usaremos idiv para as operações de divisão
+        // Salva %edx
+        if(pNum >= 3) saveParam(2);
+        printf("cltd\n");
+        if(*y == '$'){ //idiv não aceita constante como parâmetro
+          printf("movl %s, %%ecx\n", y);
+          printf("idivl %%ecx\n");
+        }
+        else printf("idivl %s\n", y);
+      
+        //Recupera %edx
+        if(pNum >= 3) recoverParam(2);
 
+        break;
+    }
+  }*/ 
+    
   //retorno de constante
   r = sscanf(line, "return ci%d", &index_1);
 
