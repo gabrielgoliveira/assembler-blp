@@ -113,3 +113,17 @@ void stack_print_element(StackElement *element, int pos) {
     printf("## pi%d => -%d(%%rbp)\n", index, pos_stack);
   }
 }
+
+void print_stack_s(Stack *s) {
+  StackElement *element = s->base;
+  for (int i = 0; i < s->size; i++) {
+    if(element == NULL) return;
+    printf("\n\n");
+    printf("type %d\n", element->type);
+    printf("len %d\n", element->len);
+    printf("index %d\n", element->index);
+    printf("size_array %d\n", element->size_array);
+    printf("pos_stack %d\n", element->pos_stack);
+    element = element->next;
+  }
+}

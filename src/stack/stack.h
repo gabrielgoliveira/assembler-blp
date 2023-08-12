@@ -24,6 +24,7 @@ StackElement* stack_peek(Stack* stack);
 int stack_isEmpty(Stack* stack);
 void stack_destroy(Stack* stack);
 void stack_print_element(StackElement *element, int pos);
+void print_stack_s(Stack *s);
 
 #endif // STACK_H
 
