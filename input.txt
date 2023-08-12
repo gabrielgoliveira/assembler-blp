@@ -15,7 +15,7 @@ vi3 = ci-110
 
 vi5 = vi3
 
-if vi3 eq vi5
+if vi3 eq ci5
 endif
 
 return ci5

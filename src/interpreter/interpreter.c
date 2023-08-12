@@ -49,7 +49,7 @@ int recognize_line(ExecutionContext *c, char *line) {
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, parametro, parametro_value);
         printf(" -----> %s\n", parametro_value);
-        printf("movl %s, %s\n", parametro_value, registrador_pilha);
+        printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
         return 1;
       }else {
         //variavel inteira
