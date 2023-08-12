@@ -175,15 +175,21 @@ int recognize_line(ExecutionContext *c, char *line) {
     return 1;
   }
   //IF
-  char if_primeiro[3], if_segundo[3], comparacao[2];
+  char if_primeiro[4], if_segundo[4], comparacao[2];
   r = sscanf(line, "if %s %s %s", if_primeiro, comparacao, if_segundo);
   if(r == 3){
     char registrador_pilha[10] = "";
     char registrador_pilha2[10] = "";
     context_get(c, if_primeiro, registrador_pilha);
     context_get(c, if_segundo, registrador_pilha2);
-    
-    printf("cmpl %s, %s\n", registrador_pilha2, registrador_pilha);
+
+    printf(if_primeiro[0] == 'c' && if_segundo[0] == 'c'?
+            "cmpl $%s, $%s\n":
+            if_primeiro[0] == 'c'?
+            "cmpl %s, $%s\n":
+            if_segundo[0] == 'c'?
+            "cmpl $%s, %s\n" :
+            "cmpl %s, %s\n", registrador_pilha2, registrador_pilha);
     if(!strcmp(comparacao, "eq")){
       printf("jne end_inf");
     }
