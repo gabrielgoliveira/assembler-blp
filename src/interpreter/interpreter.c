@@ -18,7 +18,7 @@ int recognize_line(ExecutionContext *c, char *line) {
 
   int flag = 0;
   flag = if_call_function(c, line);
-  if(flag == 0) return 0;
+  if(flag == 1) return 0;
 
   // atribuicao simples
   if(r == 5) {
@@ -48,7 +48,8 @@ int recognize_line(ExecutionContext *c, char *line) {
         printf("## %s\n", parametro);
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, parametro, parametro_value);
-        printf("movl %s, %s\n", parametro_value, registrador_pilha);
+        printf(" -----> %s\n", parametro_value);
+        printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
         return 1;
       }else {
         //variavel inteira
@@ -108,38 +109,57 @@ int recognize_line(ExecutionContext *c, char *line) {
         }
       }
     }
-  }
- /* 
-  Falta adaptar esse código para nosso trabalho (código de trabalho anterior)
+  } 
+
   //Operações
   if(r == 9){
-    switch(atr_cop){
-      case '+':
-        printf("addl %s, %%eax\n", y);
-        break;
-      case '-':
-        printf("subl %s, %%eax\n", y);
-        break;
-      case '*':
-        printf("imull %s, %%eax\n", y);
-        break;
-      case '/':
-        // Como em BPL somente o tipo signed int pode ser operado, usaremos idiv para as operações de divisão
-        // Salva %edx
-        if(pNum >= 3) saveParam(2);
-        printf("cltd\n");
-        if(*y == '$'){ //idiv não aceita constante como parâmetro
-          printf("movl %s, %%ecx\n", y);
-          printf("idivl %%ecx\n");
-        }
-        else printf("idivl %s\n", y);
-      
-        //Recupera %edx
-        if(pNum >= 3) recoverParam(2);
+    char variavel_pilha[20];
+    char variavel_pilha2[20];
+    char constante[20];
+    char parametro[20];
+    char registrador_pilha[20] = "";
+    char registrador_pilha2[20] = "";
+    char constante_value[20] = "";
+    char parametro_value[20] = "";
+    
+    sprintf(variavel_pilha, "v%c%d", atr_c0, atr_i0);
 
-        break;
+    if(atr_c1 == 'c'){
+      context_get(c, variavel_pilha, registrador_pilha);
+      context_get(c, constante, constante_value);
+      printf("movl $%d, %s\n", constante, constante_value);
     }
-  }*/ 
+    else if(atr_c1 == 'p'){
+    }else{
+			
+		}
+    //Adição
+    if(atr_cop == '+'){
+      if(atr_c3 == 'c'){
+			  printf("addl $%d, %s\n", atr_i2, constante_value);
+      }
+		}
+
+    //Subtração
+    else if(atr_cop == '-'){
+      if(atr_c3 == 'c'){
+        printf("subl $%d, %s\n", atr_i2, constante_value);
+        printf("movl $%s, %s\n", constante_value, registrador_pilha);
+      }
+    }
+    //Multiplicação
+    else if(atr_cop == '*'){
+      if(atr_c3 == 'c'){
+        printf("imull  $%d, %s\n", atr_i2, constante_value);
+        printf("movl $%s, %s\n", constante_value, registrador_pilha);
+      }
+    }else{
+      if(atr_c3  == 'c'){
+        printf("movl $%d, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", atr_i2, constante_value);
+        printf("movl $%s, %s\n", constante_value, registrador_pilha);
+      }
+    }
+  }
     
   //retorno de constante
   r = sscanf(line, "return ci%d", &index_1);
@@ -161,15 +181,21 @@ int recognize_line(ExecutionContext *c, char *line) {
     return 1;
   }
   //IF
-  char if_primeiro[3], if_segundo[3], comparacao[2];
+  char if_primeiro[4], if_segundo[4], comparacao[2];
   r = sscanf(line, "if %s %s %s", if_primeiro, comparacao, if_segundo);
   if(r == 3){
     char registrador_pilha[10] = "";
     char registrador_pilha2[10] = "";
     context_get(c, if_primeiro, registrador_pilha);
     context_get(c, if_segundo, registrador_pilha2);
-    
-    printf("cmpl %s, %s\n", registrador_pilha2, registrador_pilha);
+
+    printf(if_primeiro[0] == 'c' && if_segundo[0] == 'c'?
+            "cmpl $%s, $%s\n":
+            if_primeiro[0] == 'c'?
+            "cmpl %s, $%s\n":
+            if_segundo[0] == 'c'?
+            "cmpl $%s, %s\n" :
+            "cmpl %s, %s\n", registrador_pilha2, registrador_pilha);
     if(!strcmp(comparacao, "eq")){
       printf("jne end_inf");
     }
@@ -253,6 +279,35 @@ void chamada_de_funcao(ExecutionContext *c, char *p1){
   printf("movl %s, ", registrador_constante);
 }
 
+// imprimir atribuicao de parametros para os registradores
+void print_att_params(ExecutionContext *c, char *param, int index) {
+  int pos_stack;
+  char reg_params_name[][4] = {"rdi", "rsi", "rdx"};
+  if(param != NULL) {
+    pos_stack = context_get_element_stack(c, param, NULL); // pega a posicao na pilha
+    if(pos_stack == -1) {
+      printf("ERRO: VARIAVEL NAO LOCALIZADA !!!!! [%s]\n", param);
+      return ;
+    }
+    printf("movq -%d(%%rbp), %%%s\n", pos_stack, reg_params_name[index-1]);
+  }
+}
+
+// imprimir salvamento de registradores na pilha
+void print_save_regs(ExecutionContext *c) {
+  Stack *s = c->stack;
+  StackElement *element = s->base;
+  int size = s->size;
+
+  for (int i = 0; i < size; i++) {
+
+  }
+}
+
+// imprimir recuperacao de registradores na pilha
+void print_recover_params(ExecutionContext *c, char *param, int index) {
+
+}
 
 int if_call_function(ExecutionContext *c, char *line) {
   int index_function;
@@ -265,34 +320,54 @@ int if_call_function(ExecutionContext *c, char *line) {
 
   /*
     1. AO CHAMAR UMA FUNCAO ALOCAR PARAMETROS NOS REGISTRADORES
-  
   */
 
-  context_save(c);
-  context_print_stack(c);
-  
+  context_save(c);            // salva tudo na pilha (variavel de registrador, parametros ....)
+  context_print_stack(c);     // imprimir a pilha
+  int pos_stack;
   switch (n_match)
   {
-  case 1:
-    /* nenhum parametro */
+  case 1: /* nenhum parametro */
+  
+    printf("call f%d\n", index_function);
+    break;
+  
+  case 2: /* 1 parametro */
+    
+    // pos_stack = context_get_element_stack(c, param1, NULL);
+    // if(pos_stack == -1) {
+    //   printf("ERRO: VARIAVEL NAO LOCALIZADA !!!!! [%s]\n", param1);
+    // }
+    // printf("movq -%d(%%rbp), %%rdi\n", pos_stack);
+
+    // resgata os parametros na pilha e move para os seus respectivos registradores
+    print_att_params(c, param1, 1);
+    printf("call f%d\n", index_function);
+    print_recover_params(c, param1, 1);
+    break;
+  
+  case 3: /* 2 parametros */
+    
+    print_att_params(c, param1, 1);
+    print_att_params(c, param2, 2);
 
     printf("call f%d\n", index_function);
-    break;
-  
-  case 2:
-    /* 1 parametro */
-    // context_get(c, variavel_pilha, registrador_pilha);
-    printf("call f%d\n", index_function);
-    break;
-  
-  case 3:
-    /* 2 parametros */
-    printf("call f%d\n", index_function);
+
+    print_recover_params(c, param1, 1);
+    print_recover_params(c, param2, 2);
     break;
   
   case 4:
     /* 3 parametros */
+    print_att_params(c, param1, 1);
+    print_att_params(c, param2, 2);
+    print_att_params(c, param3, 3);
+
     printf("call f%d\n", index_function);
+
+    print_recover_params(c, param1, 1);
+    print_recover_params(c, param2, 2);
+    print_recover_params(c, param3, 3);
     break;
   
   default:
