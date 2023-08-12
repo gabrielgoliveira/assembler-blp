@@ -56,5 +56,6 @@ void context_print_stack(ExecutionContext* c);
 
 void context_save(ExecutionContext* c);
 
+int context_get_element_stack(ExecutionContext* c, char *str, char *dest_result);
 
 #endif //__EXECUTION_CONTEXT_H__

@@ -6,6 +6,8 @@ typedef struct StackElement {
     int len;
     int index;
     int size_array;
+    int pos_stack;
+    struct StackElement* prev;
     struct StackElement* next;
 } StackElement;
 

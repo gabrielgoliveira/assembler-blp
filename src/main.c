@@ -91,19 +91,19 @@ int main() {
 
       // imprime o que foi alocado
       if(is_verbose) {
-        printf("# registradores e variaveis alocados :\n");
+        printf("# ========== REGISTRADORES ==========\n");
         context_print_params(&context);
         context_print_vlocal_regs(&context);
-        context_print_vlocal_stack(&context);
+        // context_print_vlocal_stack(&context);
         // print_struct(&context);
 
         // aloca a pilha
 
-        printf("# ========== STACK =========== \n");
-        context_alloc_stack(&context);
-        printf("Size Pilha : %d\n", context.stack->size);
-        context_print_stack(&context);
+        printf("\n# ========== STACK =========== \n");
+        context_alloc_stack(&context); // aloca a pilha de acordo com as definicoes realizadas
+        context_print_stack(&context); // printa a pilha
         
+        printf("# ============================== \n\n");
       }
       
       continue;
@@ -116,9 +116,7 @@ int main() {
     }
 
     int r = -1;
-    //printf("OI1\n");
     r = recognize_line(&context, line);
-    //printf("OI2\n");
 
     // if(!flag && r == -1) {
     //   printf("============================================\n");

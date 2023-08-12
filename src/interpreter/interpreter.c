@@ -18,7 +18,7 @@ int recognize_line(ExecutionContext *c, char *line) {
 
   int flag = 0;
   flag = if_call_function(c, line);
-  if(flag == 0) return 0;
+  if(flag == 1) return 0;
 
   // atribuicao simples
   if(r == 5) {
@@ -48,6 +48,7 @@ int recognize_line(ExecutionContext *c, char *line) {
         printf("## %s\n", parametro);
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, parametro, parametro_value);
+        printf(" -----> %s\n", parametro_value);
         printf("movl %s, %s\n", parametro_value, registrador_pilha);
         return 1;
       }else {
@@ -230,8 +231,8 @@ int if_call_function(ExecutionContext *c, char *line) {
   
   */
 
-  context_save(c);
-  context_print_stack(c);
+  context_save(c);            // salva tudo na pilha (variavel de registrador, parametros ....)
+  context_print_stack(c);     // imprimir a pilha
   
   switch (n_match)
   {
@@ -243,7 +244,13 @@ int if_call_function(ExecutionContext *c, char *line) {
   
   case 2:
     /* 1 parametro */
+
     // context_get(c, variavel_pilha, registrador_pilha);
+    int pos_stack = context_get_element_stack(c, param1, NULL);
+    if(pos_stack == -1) {
+      printf("ERRO: VARIAVEL NAO LOCALIZADA !!!!! [%s]\n", param1);
+    }
+    printf("movq -%d(%%rbp), %%rdi\n", pos_stack);
     printf("call f%d\n", index_function);
     break;
   
