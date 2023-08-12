@@ -318,6 +318,11 @@ int if_call_function(ExecutionContext *c, char *line) {
 
   context_save(c);            // salva tudo na pilha (variavel de registrador, parametros ....)
   context_print_stack(c);     // imprimir a pilha
+
+  // printf("==================================\n");
+  // print_stack_s(c->stack);
+  // printf("==================================\n");
+  
   int pos_stack;
   switch (n_match)
   {

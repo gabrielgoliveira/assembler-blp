@@ -70,20 +70,12 @@ int main() {
 
     // inicia escopo de definicao de variaveis
     if(strcmp(line, "def\n") == 0 || strcmp(line, "def") == 0) {
-      // if(is_verbose) printf("# ========== Criando escopo para definicao de variaveis ============\n");
       scope_def_locals_var = 1;
-
-      // if(is_verbose) {
-      //   // mostra registradores alocados
-      //   context_print_params(&context);
-      // }
-      
       continue;
     }
 
     // finaliza escopo de definicao de variaveis
     if(strcmp(line, "enddef\n") == 0 || strcmp(line, "enddef") == 0) {
-      // if(is_verbose) printf("# =========== Finalizando escopo para definicao de variaveis ==========\n");
       scope_def_locals_var = 0;
       
       // aloca a pilha
@@ -98,7 +90,7 @@ int main() {
       // aloca as variaveis de pilha
       context_alloc_stack(&context); // aloca a pilha de acordo com as definicoes realizadas
       context_print_stack(&context); // printa a pilha
-        
+      
       continue;
     }
     
