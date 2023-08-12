@@ -70,39 +70,90 @@ int recognize_line(ExecutionContext *c, char *line) {
           return 1;
         }
       }
+    }else{ //registrador
+      sprintf(variavel_pilha, "vr%d", atr_c0, atr_i0);
+      //constante
+      if(atr_c1 == 'c') {
+        sprintf(constante, "ci%d", atr_i1);
+        printf("## %s\n", constante);
+        context_get(c, variavel_pilha, registrador_pilha);
+        context_get(c, constante, constante_value);
+        printf("movl $%s, %s\n", constante_value, registrador_pilha);
+        return 1;
+      }
+      else if(atr_c1 == 'p') {
+        //parametro
+        sprintf(parametro, "pi%d", atr_i1);
+        printf("## %s\n", parametro);
+        context_get(c, variavel_pilha, registrador_pilha);
+        context_get(c, parametro, parametro_value);
+        printf("movl %s, %s\n", parametro_value, registrador_pilha);
+        return 1;
+      }else {
+        //variavel inteira
+        if(atr_c2 == 'i') {
+          sprintf(variavel_pilha2, "vi%d", atr_i1);
+          printf("## %s\n", variavel_pilha2);
+          context_get(c, variavel_pilha, registrador_pilha);
+          context_get(c, variavel_pilha2, registrador_pilha2);
+          printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
+          return 1;
+        }else {
+          //registrador, verificar essa parte ainda
+          sprintf(variavel_pilha2, "vr%d", atr_i1);
+          printf("## %s\n", variavel_pilha2);
+          context_get(c, variavel_pilha, registrador_pilha);
+          context_get(c, variavel_pilha2, registrador_pilha2);
+          printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
+          return 1;
+        }
+      }
     }
-  }
- /* 
-  Falta adaptar esse código para nosso trabalho (código de trabalho anterior)
+  } 
+
   //Operações
   if(r == 9){
-    switch(atr_cop){
-      case '+':
-        printf("addl %s, %%eax\n", y);
-        break;
-      case '-':
-        printf("subl %s, %%eax\n", y);
-        break;
-      case '*':
-        printf("imull %s, %%eax\n", y);
-        break;
-      case '/':
-        // Como em BPL somente o tipo signed int pode ser operado, usaremos idiv para as operações de divisão
-        // Salva %edx
-        if(pNum >= 3) saveParam(2);
-        printf("cltd\n");
-        if(*y == '$'){ //idiv não aceita constante como parâmetro
-          printf("movl %s, %%ecx\n", y);
-          printf("idivl %%ecx\n");
-        }
-        else printf("idivl %s\n", y);
-      
-        //Recupera %edx
-        if(pNum >= 3) recoverParam(2);
+    char variavel_pilha[20];
+    char variavel_pilha2[20];
+    char constante[20];
+    char parametro[20];
+    char registrador_pilha[20] = "";
+    char registrador_pilha2[20] = "";
+    char constante_value[20] = "";
+    char parametro_value[20] = "";
 
-        break;
+    if(atr_c1 == 'c'){
+      //Para constante
+      printf("movl $%d, %%r8d\n", atr_i1);
     }
-  }*/ 
+    else if(atr_c1 == 'p'){
+    }else{
+			
+		}
+    //Adição
+    if(atr_cop == '+'){
+      if(atr_c3 == 'c'){
+			  printf("addl $%d, %%r8d\n", atr_i2);
+      }
+		}
+
+    //Subtração
+    else if(atr_cop == '-'){
+      if(atr_c3 == 'c'){
+        printf("subl $%d, %%r8d\n", atr_i2);
+      }
+    }
+    //Multiplicação
+    else if(atr_cop == '*'){
+      if(atr_c3 == 'c'){
+        printf("imull  $%d, %%r8d\n", atr_i2);
+      }
+    }else{
+      if(atr_c3  == 'c'){
+        printf("movl $%d, %%ecx\nmovl %%r8d, %%eax\ncltd\nidivl %%ecx\n", atr_i2);
+      }
+    }
+  }
     
   //retorno de constante
   r = sscanf(line, "return ci%d", &index_1);
