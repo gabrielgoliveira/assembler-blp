@@ -54,4 +54,7 @@ void print_struct(ExecutionContext* c);
 void context_alloc_stack(ExecutionContext* c);
 void context_print_stack(ExecutionContext* c);
 
+void context_save(ExecutionContext* c);
+
+
 #endif //__EXECUTION_CONTEXT_H__

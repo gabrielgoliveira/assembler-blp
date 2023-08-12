@@ -2,6 +2,6 @@
 #define TYPES_INTERPRETER_H
 
 #define ID_TYPE_VAR_LOCAL_STACK 1
-
+#define ID_TYPE_PARAMS 2
 
 #endif

@@ -86,5 +86,9 @@ void stack_print_element(StackElement *element, int pos) {
     int pos_stack = (pos + 1)*4;
     printf("## vi%d => -%d(%%rbp)\n\n", index, pos_stack);
 
+  } else if (element->type == ID_TYPE_PARAMS) {
+    int index = element->index;
+    int pos_stack = (pos + 1)*4;
+    printf("## pi%d => -%d(%%rbp)\n\n", index, pos_stack);
   }
 }

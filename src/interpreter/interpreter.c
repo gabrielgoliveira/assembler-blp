@@ -229,10 +229,15 @@ int if_call_function(ExecutionContext *c, char *line) {
     1. AO CHAMAR UMA FUNCAO ALOCAR PARAMETROS NOS REGISTRADORES
   
   */
+
+  context_save(c);
+  context_print_stack(c);
+  
   switch (n_match)
   {
   case 1:
     /* nenhum parametro */
+
     printf("call f%d\n", index_function);
     break;
   

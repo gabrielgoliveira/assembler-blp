@@ -332,6 +332,11 @@ void print_struct(ExecutionContext* c) {
 }
 
 /*
+  ==============================================================================================================
+
+*/
+
+/*
   Essa funcao deve ser chamada apos a definicao de variaveis
 ela analisa o que precisa ser alocado na pilha
 */
@@ -371,8 +376,15 @@ void context_print_stack(ExecutionContext* c) {
   Salva o contexto atual da execucao
 */
 void context_save(ExecutionContext* c) {
+  Stack *s = c->stack;
 
   // Salva os parametros da funcao
+  if(c->reg_params[0] != -1) {
+    for (int i = 0; i < 4; i++) {
+      if(c->reg_params[i] == -1) break;
+      stack_push(s, ID_TYPE_PARAMS, c->reg_params[i], i+1, -1);
+    }
+  }
 
   // Salva os registradores
 }
