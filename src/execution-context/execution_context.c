@@ -331,8 +331,12 @@ void print_struct(ExecutionContext* c) {
   printf("============\n\n");
 }
 
+/*
+  Essa funcao deve ser chamada apos a definicao de variaveis
+ela analisa o que precisa ser alocado na pilha
+*/
 void context_alloc_stack(ExecutionContext* c) {
-  int flag = 1;
+  int flag = c->var_int_stack_index[0];
   Stack *s = c->stack;
 
   if(flag != -1) {
@@ -347,6 +351,9 @@ void context_alloc_stack(ExecutionContext* c) {
 }
 
 
+/*
+  Printa a pilha
+*/
 void context_print_stack(ExecutionContext* c) {
   int flag = c->var_int_stack_index[0];
   Stack *s = c->stack;
@@ -358,5 +365,28 @@ void context_print_stack(ExecutionContext* c) {
     element = element->next;
   }
 
+}
+
+/*
+  Salva o contexto atual da execucao
+*/
+void context_save(ExecutionContext* c) {
+
+  // Salva os parametros da funcao
+
+  // Salva os registradores
+}
+
+/*
+  Remove apenas as variaveis que nao sao de pilha mas 
+que estao na pilha e depois printa 
+
+*/
+
+void context_destroy_print(ExecutionContext* c) {
+
+  // Salva os parametros da funcao
+
+  // Salva os registradores
 }
 
