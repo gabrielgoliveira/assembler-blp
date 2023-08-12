@@ -108,38 +108,51 @@ int recognize_line(ExecutionContext *c, char *line) {
         }
       }
     }
-  }
- /* 
-  Falta adaptar esse código para nosso trabalho (código de trabalho anterior)
+  } 
+
   //Operações
   if(r == 9){
-    switch(atr_cop){
-      case '+':
-        printf("addl %s, %%eax\n", y);
-        break;
-      case '-':
-        printf("subl %s, %%eax\n", y);
-        break;
-      case '*':
-        printf("imull %s, %%eax\n", y);
-        break;
-      case '/':
-        // Como em BPL somente o tipo signed int pode ser operado, usaremos idiv para as operações de divisão
-        // Salva %edx
-        if(pNum >= 3) saveParam(2);
-        printf("cltd\n");
-        if(*y == '$'){ //idiv não aceita constante como parâmetro
-          printf("movl %s, %%ecx\n", y);
-          printf("idivl %%ecx\n");
-        }
-        else printf("idivl %s\n", y);
-      
-        //Recupera %edx
-        if(pNum >= 3) recoverParam(2);
+    char variavel_pilha[20];
+    char variavel_pilha2[20];
+    char constante[20];
+    char parametro[20];
+    char registrador_pilha[20] = "";
+    char registrador_pilha2[20] = "";
+    char constante_value[20] = "";
+    char parametro_value[20] = "";
 
-        break;
+    if(atr_c1 == 'c'){
+      //Para constante
+      printf("movl $%d, %%r8d\n", atr_i1);
     }
-  }*/ 
+    else if(atr_c1 == 'p'){
+    }else{
+			
+		}
+    //Adição
+    if(atr_cop == '+'){
+      if(atr_c3 == 'c'){
+			  printf("addl $%d, %%r8d\n", atr_i2);
+      }
+		}
+
+    //Subtração
+    else if(atr_cop == '-'){
+      if(atr_c3 == 'c'){
+        printf("subl $%d, %%r8d\n", atr_i2);
+      }
+    }
+    //Multiplicação
+    else if(atr_cop == '*'){
+      if(atr_c3 == 'c'){
+        printf("imull  $%d, %%r8d\n", atr_i2);
+      }
+    }else{
+      if(atr_c3  == 'c'){
+        printf("movl $%d, %%ecx\nmovl %%r8d, %%eax\ncltd\nidivl %%ecx\n", atr_i2);
+      }
+    }
+  }
     
   //retorno de constante
   r = sscanf(line, "return ci%d", &index_1);
