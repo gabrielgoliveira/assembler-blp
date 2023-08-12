@@ -137,6 +137,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     if(atr_cop == '+'){
       if(atr_c3 == 'c'){
 			  printf("addl $%d, %s\n", atr_i2, constante_value);
+        printf("movl $%s, %s\n", constante_value, registrador_pilha);
       }
 		}
 
@@ -324,6 +325,11 @@ int if_call_function(ExecutionContext *c, char *line) {
 
   context_save(c);            // salva tudo na pilha (variavel de registrador, parametros ....)
   context_print_stack(c);     // imprimir a pilha
+
+  // printf("==================================\n");
+  // print_stack_s(c->stack);
+  // printf("==================================\n");
+  
   int pos_stack;
   switch (n_match)
   {

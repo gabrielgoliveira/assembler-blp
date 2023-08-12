@@ -70,41 +70,26 @@ int main() {
 
     // inicia escopo de definicao de variaveis
     if(strcmp(line, "def\n") == 0 || strcmp(line, "def") == 0) {
-      // if(is_verbose) printf("# ========== Criando escopo para definicao de variaveis ============\n");
       scope_def_locals_var = 1;
-
-      // if(is_verbose) {
-      //   // mostra registradores alocados
-      //   context_print_params(&context);
-      // }
-      
       continue;
     }
 
     // finaliza escopo de definicao de variaveis
     if(strcmp(line, "enddef\n") == 0 || strcmp(line, "enddef") == 0) {
-      // if(is_verbose) printf("# =========== Finalizando escopo para definicao de variaveis ==========\n");
       scope_def_locals_var = 0;
       
       // aloca a pilha
       printf("subq X\n");
 
-      // imprime o que foi alocado
-      if(is_verbose) {
-        printf("# registradores e variaveis alocados :\n");
-        context_print_params(&context);
-        context_print_vlocal_regs(&context);
-        context_print_vlocal_stack(&context);
-        // print_struct(&context);
+      // aloca as variaveis de registradores
+      printf("\n# ========== REGISTRADORES E PARAMETROS ==========\n");
+      context_print_params(&context);
+      context_print_vlocal_regs(&context);
+      printf("# ========== END  ===================================\n");
 
-        // aloca a pilha
-
-        printf("# ========== STACK =========== \n");
-        context_alloc_stack(&context);
-        printf("Size Pilha : %d\n", context.stack->size);
-        context_print_stack(&context);
-        
-      }
+      // aloca as variaveis de pilha
+      context_alloc_stack(&context); // aloca a pilha de acordo com as definicoes realizadas
+      context_print_stack(&context); // printa a pilha
       
       continue;
     }
@@ -116,9 +101,7 @@ int main() {
     }
 
     int r = -1;
-    //printf("OI1\n");
     r = recognize_line(&context, line);
-    //printf("OI2\n");
 
     // if(!flag && r == -1) {
     //   printf("============================================\n");

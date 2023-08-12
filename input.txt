@@ -3,9 +3,9 @@ def
 vet va1 size ci10
 vet va2 size ci20
 var vi3
-reg ri4
+reg vr4
 var vi5
-reg ri6
+reg vr6
 enddef
 
 vi3 = pi2 
@@ -15,7 +15,7 @@ vi3 = ci-110
 
 vi5 = vi3
 
-if vi3 eq vi5
+if vi5 gt vi3
 endif
 
 return ci5

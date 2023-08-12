@@ -28,17 +28,38 @@ void stack_push(Stack* stack, int type, int len, int index, int size_array) {
     newElement->size_array = size_array;
     newElement->next = stack->top;
 
-    // printf("type %d\n", newElement->type);
-    // printf("len %d\n", newElement->len);
-    // printf("index %d\n", newElement->index);
-    // printf("size arr %d\n", newElement->size_array);
-    // printf("type %d\n", newElement->size_array);
+    StackElement* oldElement = stack->top;
+
+    if (stack->size == 0) {
+      stack->base = newElement;
+      newElement->next = NULL;
+      newElement->prev = NULL;
+
+      // define a posicao na pilha
+      if(newElement->type < 10) {
+        newElement->pos_stack = 4;
+      } else {
+        newElement->pos_stack = 8;
+      }
+
+    } else if (stack->size >= 1) {
+      newElement->prev = stack->top;
+      oldElement->next = newElement;
+
+      // define a posicao na pilha
+      int pos_stack_old = oldElement->pos_stack;
+
+      if(newElement->type < 10) {
+        newElement->pos_stack = 4 + pos_stack_old;
+      } else {
+        newElement->pos_stack = 8 + pos_stack_old;
+      }
+
+
+    }
+
     stack->top = newElement;
     stack->size++;
-
-    if (stack->size == 1) {
-        stack->base = newElement;
-    }
 }
 
 void stack_pop(Stack* stack) {
@@ -83,12 +104,26 @@ void stack_print_element(StackElement *element, int pos) {
     // variavel local de pilha
 
     int index = element->index;
-    int pos_stack = (pos + 1)*4;
-    printf("## vi%d => -%d(%%rbp)\n\n", index, pos_stack);
+    int pos_stack = element->pos_stack;
+    printf("## vi%d => -%d(%%rbp)\n", index, pos_stack);
 
   } else if (element->type == ID_TYPE_PARAMS) {
     int index = element->index;
-    int pos_stack = (pos + 1)*4;
-    printf("## pi%d => -%d(%%rbp)\n\n", index, pos_stack);
+    int pos_stack = element->pos_stack;
+    printf("## pi%d => -%d(%%rbp)\n", index, pos_stack);
+  }
+}
+
+void print_stack_s(Stack *s) {
+  StackElement *element = s->base;
+  for (int i = 0; i < s->size; i++) {
+    if(element == NULL) return;
+    printf("\n\n");
+    printf("type %d\n", element->type);
+    printf("len %d\n", element->len);
+    printf("index %d\n", element->index);
+    printf("size_array %d\n", element->size_array);
+    printf("pos_stack %d\n", element->pos_stack);
+    element = element->next;
   }
 }

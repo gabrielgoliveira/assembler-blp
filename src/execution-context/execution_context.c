@@ -19,8 +19,8 @@ a alocacao se da de forma que :
 
 void context_create(ExecutionContext* c) {
   c->var_int_stack_index = (int*)malloc(sizeof(int)*4);
-  c->var_int_reg_index = (int*)malloc(sizeof(int)*4);
   c->arr_int_index = (int*)malloc(sizeof(int)*4);
+  c->var_int_reg_index = (int*)malloc(sizeof(int)*4);
   c->reg_params = (int*)malloc(sizeof(int)*3);
   c->stack = stack_create();
   c->init = 1;
@@ -101,7 +101,8 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
   }
   
   int index = 0;
-
+  char type;
+  
   if(sscanf(str, VAR_STACK_FORMAT, &index) == 1) {
     // eh uma variavel de pilha
     int pos = _indexof(c->var_int_stack_index, 4, index);
@@ -109,9 +110,8 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
       printf("Erro : nao foi possivel encontrar a variavel de pilha\n");
     }
 
-    int pos_stack = (pos+1) * 4;
-
-    // printf("%d(%%rbp)\n", pos_stack); 
+    int pos_stack = context_get_element_stack(c, str, NULL);
+ 
     char stack_str[20];
     snprintf(stack_str, sizeof(stack_str), "-%d(%%rbp)", pos_stack);
     strcpy(dest, stack_str);
@@ -165,7 +165,27 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
     sprintf(number_str, "%d", index);
     strcpy(dest, number_str);
   }
+  
+  if(sscanf(str, PARAM_FORMAT, &type, &index) == 2) {
+    index--;
+    int *params = c->reg_params;
+    char names_regs_params[][4] = {"rdi", "rsi", "rdx"};
+    for(int i = 0; i < 3; i++) {
+      if(params[i] == -1) break;
+      if(i != index) continue;
+      if(params[i] == 8) {
+        strcpy(dest, names_regs_params[i]);
+        return ;
+      } else {
 
+        names_regs_params[i][0] = 'e';
+        strcpy(dest, names_regs_params[i]);
+        return ;
+      }
+
+    }
+    strcpy(dest, "##### !!!!");
+  }
   // implementar array
 }
 
@@ -292,7 +312,7 @@ void context_print_vlocal_regs(ExecutionContext* c) {
   int *arr = c->var_int_reg_index;
   for (int i = 0 ; i < 4; i++) {
     if(arr[i] == -1) continue;
-    printf("# reg%d => %s\n", arr[i], regs_names[i]);
+    printf("# vr%d => %s\n", arr[i], regs_names[i]);
   }
 }
 
@@ -360,15 +380,18 @@ void context_alloc_stack(ExecutionContext* c) {
   Printa a pilha
 */
 void context_print_stack(ExecutionContext* c) {
+  printf("\n\n## ----------- STACK ---------------\n");
   int flag = c->var_int_stack_index[0];
   Stack *s = c->stack;
   
-  StackElement *element = s->top;
+  StackElement *element = s->base;
   for(int i = 0; i < s->size; i++) {
     if(element == NULL) break;
     stack_print_element(element, i);
     element = element->next;
   }
+
+  printf("## ----------- END STACK -----------\n\n");
 
 }
 
@@ -377,22 +400,48 @@ void context_print_stack(ExecutionContext* c) {
 */
 void context_save(ExecutionContext* c) {
   Stack *s = c->stack;
+  char nomes_registradores[][4] = {"rdi", "rsi", "rdx"};
+  printf("# => salvando na pilha\n");
 
   // Salva os parametros da funcao
   if(c->reg_params[0] != -1) {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 3; i++) {
       if(c->reg_params[i] == -1) break;
       stack_push(s, ID_TYPE_PARAMS, c->reg_params[i], i+1, -1);
+      StackElement *element;
+      element = s->top;
+      if(c->reg_params[i] < 8) {
+        // imprime a operacao de salvar o registrador na pilha
+        nomes_registradores[i][0] = 'e';
+        printf("movq %%%s -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
+
+      } else {
+        printf("movq %%%s -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
+      }
+      
+      // printf("movq pi%d -%d(%%rsp)\n", i+1, element->pos_stack);
     }
   }
 
   // Salva os registradores
+  if(c->var_int_reg_index[0] != -1) {
+    for (int i = 0; i < 4; i++) {
+      if(c->var_int_reg_index[i] == -1) break;
+      // stack_push(Stack* stack, int type, int len, int index, int size_array)
+      stack_push(s, ID_TYPE_VAR_LOCAL_REG, 4, c->var_int_reg_index[i], -1);
+
+      StackElement *element;
+      element = s->top;
+  
+      printf("movq %%%s -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
+    }
+  }
+
 }
 
 /*
   Remove apenas as variaveis que nao sao de pilha mas 
 que estao na pilha e depois printa 
-
 */
 
 void context_destroy_print(ExecutionContext* c) {
@@ -402,3 +451,51 @@ void context_destroy_print(ExecutionContext* c) {
   // Salva os registradores
 }
 
+
+int context_get_element_stack(ExecutionContext* c, char *str, char *dest_result) {
+  Stack *s = c->stack;
+  StackElement *element = s->base;
+
+  int type = -1, index;
+  int template = -1;
+
+  /*
+    p%c%d (parametro na pilha)
+    v%c%d (variavel de pilha) onde %c eh i ou a
+    v%c%d (variavel de registrador) onde %c == r
+
+    OBJETIVO : Recuperar a posicao da pilha de uma variavel 
+      movq -4(%rbp), %rsi
+  */
+
+  char *fmt_1 = "p%c%d";
+  char *fmt_2 = "v%c%d";
+  char id;
+
+  int n_match = sscanf(str, fmt_1, &id, &index);
+  
+  if(n_match == 2) {
+    if(id == 'i') type = ID_TYPE_PARAMS;      // parametro inteiro
+    if(id == 'a') type = ID_TYPE_PARAMS_ARR;  // parametro array
+    template = 1;
+  } else if (sscanf(str, fmt_2, &id, &index) == 2)  {
+    if(id == 'i') type = ID_TYPE_VAR_LOCAL_STACK;
+    if(id == 'a') type = ID_TYPE_ARR_LOCAL;
+    if(id == 'r') type = ID_TYPE_VAR_LOCAL_REG;
+    template = 2;
+  }
+
+  if(type == -1) return -1;
+
+  for (int i = 0; i < s->size; i++) {
+    if(element == NULL) break;
+    if(element->type == type && element->index == index) {
+      return element->pos_stack;    
+    } else {
+      element = element->next;
+    }
+
+  }
+
+  return -1;
+}
