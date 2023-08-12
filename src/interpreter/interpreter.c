@@ -69,6 +69,44 @@ int recognize_line(ExecutionContext *c, char *line) {
           return 1;
         }
       }
+    }else{ //registrador
+      sprintf(variavel_pilha, "vr%d", atr_c0, atr_i0);
+      //constante
+      if(atr_c1 == 'c') {
+        sprintf(constante, "ci%d", atr_i1);
+        printf("## %s\n", constante);
+        context_get(c, variavel_pilha, registrador_pilha);
+        context_get(c, constante, constante_value);
+        printf("movl $%s, %s\n", constante_value, registrador_pilha);
+        return 1;
+      }
+      else if(atr_c1 == 'p') {
+        //parametro
+        sprintf(parametro, "pi%d", atr_i1);
+        printf("## %s\n", parametro);
+        context_get(c, variavel_pilha, registrador_pilha);
+        context_get(c, parametro, parametro_value);
+        printf("movl %s, %s\n", parametro_value, registrador_pilha);
+        return 1;
+      }else {
+        //variavel inteira
+        if(atr_c2 == 'i') {
+          sprintf(variavel_pilha2, "vi%d", atr_i1);
+          printf("## %s\n", variavel_pilha2);
+          context_get(c, variavel_pilha, registrador_pilha);
+          context_get(c, variavel_pilha2, registrador_pilha2);
+          printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
+          return 1;
+        }else {
+          //registrador, verificar essa parte ainda
+          sprintf(variavel_pilha2, "vr%d", atr_i1);
+          printf("## %s\n", variavel_pilha2);
+          context_get(c, variavel_pilha, registrador_pilha);
+          context_get(c, variavel_pilha2, registrador_pilha2);
+          printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
+          return 1;
+        }
+      }
     }
   }
  /* 
