@@ -273,6 +273,35 @@ void chamada_de_funcao(ExecutionContext *c, char *p1){
   printf("movl %s, ", registrador_constante);
 }
 
+// imprimir atribuicao de parametros para os registradores
+void print_att_params(ExecutionContext *c, char *param, int index) {
+  int pos_stack;
+  char reg_params_name[][4] = {"rdi", "rsi", "rdx"};
+  if(param != NULL) {
+    pos_stack = context_get_element_stack(c, param, NULL); // pega a posicao na pilha
+    if(pos_stack == -1) {
+      printf("ERRO: VARIAVEL NAO LOCALIZADA !!!!! [%s]\n", param);
+      return ;
+    }
+    printf("movq -%d(%%rbp), %%%s\n", pos_stack, reg_params_name[index-1]);
+  }
+}
+
+// imprimir salvamento de registradores na pilha
+void print_save_regs(ExecutionContext *c) {
+  Stack *s = c->stack;
+  StackElement *element = s->base;
+  int size = s->size;
+
+  for (int i = 0; i < size; i++) {
+
+  }
+}
+
+// imprimir recuperacao de registradores na pilha
+void print_recover_params(ExecutionContext *c, char *param, int index) {
+
+}
 
 int if_call_function(ExecutionContext *c, char *line) {
   int index_function;
@@ -285,7 +314,6 @@ int if_call_function(ExecutionContext *c, char *line) {
 
   /*
     1. AO CHAMAR UMA FUNCAO ALOCAR PARAMETROS NOS REGISTRADORES
-  
   */
 
   context_save(c);            // salva tudo na pilha (variavel de registrador, parametros ....)
@@ -293,33 +321,47 @@ int if_call_function(ExecutionContext *c, char *line) {
   int pos_stack;
   switch (n_match)
   {
-  case 1:
-    /* nenhum parametro */
-
+  case 1: /* nenhum parametro */
+  
     printf("call f%d\n", index_function);
     break;
   
-  case 2:
-    /* 1 parametro */
-
-    // context_get(c, variavel_pilha, registrador_pilha);
+  case 2: /* 1 parametro */
     
-    pos_stack = context_get_element_stack(c, param1, NULL);
-    if(pos_stack == -1) {
-      printf("ERRO: VARIAVEL NAO LOCALIZADA !!!!! [%s]\n", param1);
-    }
-    printf("movq -%d(%%rbp), %%rdi\n", pos_stack);
+    // pos_stack = context_get_element_stack(c, param1, NULL);
+    // if(pos_stack == -1) {
+    //   printf("ERRO: VARIAVEL NAO LOCALIZADA !!!!! [%s]\n", param1);
+    // }
+    // printf("movq -%d(%%rbp), %%rdi\n", pos_stack);
+
+    // resgata os parametros na pilha e move para os seus respectivos registradores
+    print_att_params(c, param1, 1);
     printf("call f%d\n", index_function);
+    print_recover_params(c, param1, 1);
     break;
   
-  case 3:
-    /* 2 parametros */
+  case 3: /* 2 parametros */
+    
+    print_att_params(c, param1, 1);
+    print_att_params(c, param2, 2);
+
     printf("call f%d\n", index_function);
+
+    print_recover_params(c, param1, 1);
+    print_recover_params(c, param2, 2);
     break;
   
   case 4:
     /* 3 parametros */
+    print_att_params(c, param1, 1);
+    print_att_params(c, param2, 2);
+    print_att_params(c, param3, 3);
+
     printf("call f%d\n", index_function);
+
+    print_recover_params(c, param1, 1);
+    print_recover_params(c, param2, 2);
+    print_recover_params(c, param3, 3);
     break;
   
   default:

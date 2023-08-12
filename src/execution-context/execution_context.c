@@ -380,6 +380,7 @@ void context_alloc_stack(ExecutionContext* c) {
   Printa a pilha
 */
 void context_print_stack(ExecutionContext* c) {
+  printf("\n\n## ----------- STACK ---------------\n");
   int flag = c->var_int_stack_index[0];
   Stack *s = c->stack;
   
@@ -390,6 +391,8 @@ void context_print_stack(ExecutionContext* c) {
     element = element->next;
   }
 
+  printf("## ----------- END STACK -----------\n\n");
+
 }
 
 /*
@@ -397,15 +400,25 @@ void context_print_stack(ExecutionContext* c) {
 */
 void context_save(ExecutionContext* c) {
   Stack *s = c->stack;
+  char nomes_registradores[][4] = {"rdi", "rsi", "rdx"};
+  printf("# => salvando na pilha\n");
 
   // Salva os parametros da funcao
   if(c->reg_params[0] != -1) {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 3; i++) {
       if(c->reg_params[i] == -1) break;
       stack_push(s, ID_TYPE_PARAMS, c->reg_params[i], i+1, -1);
       StackElement *element;
       element = s->top;
+      if(c->reg_params[i] < 8) {
+        // imprime a operacao de salvar o registrador na pilha
+        nomes_registradores[i][0] = 'e';
+        printf("movq %%%s -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
 
+      } else {
+        printf("movq %%%s -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
+      }
+      
       // printf("movq pi%d -%d(%%rsp)\n", i+1, element->pos_stack);
     }
   }

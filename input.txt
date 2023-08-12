@@ -3,11 +3,12 @@ def
 vet va1 size ci10
 vet va2 size ci20
 var vi3
-reg ri4
+reg vr4
 var vi5
-reg ri6
+reg vr6
 enddef
 
+<<<<<<< Updated upstream
 vi3 = pi2 
 vi3 = call f2 ci1 vi3
 
@@ -17,6 +18,9 @@ vi5 = vi3
 
 if vi5 gt vi3
 endif
+=======
+call f1 vi5, vi3
+>>>>>>> Stashed changes
 
 return ci5
 end

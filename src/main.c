@@ -89,23 +89,16 @@ int main() {
       // aloca a pilha
       printf("subq X\n");
 
-      // imprime o que foi alocado
-      if(is_verbose) {
-        printf("# ========== REGISTRADORES ==========\n");
-        context_print_params(&context);
-        context_print_vlocal_regs(&context);
-        // context_print_vlocal_stack(&context);
-        // print_struct(&context);
+      // aloca as variaveis de registradores
+      printf("\n# ========== REGISTRADORES E PARAMETROS ==========\n");
+      context_print_params(&context);
+      context_print_vlocal_regs(&context);
+      printf("# ========== END  ===================================\n");
 
-        // aloca a pilha
-
-        printf("\n# ========== STACK =========== \n");
-        context_alloc_stack(&context); // aloca a pilha de acordo com as definicoes realizadas
-        context_print_stack(&context); // printa a pilha
+      // aloca as variaveis de pilha
+      context_alloc_stack(&context); // aloca a pilha de acordo com as definicoes realizadas
+      context_print_stack(&context); // printa a pilha
         
-        printf("# ============================== \n\n");
-      }
-      
       continue;
     }
     
