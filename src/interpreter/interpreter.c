@@ -284,7 +284,7 @@ int if_call_function(ExecutionContext *c, char *line) {
 
   context_save(c);            // salva tudo na pilha (variavel de registrador, parametros ....)
   context_print_stack(c);     // imprimir a pilha
-  
+  int pos_stack;
   switch (n_match)
   {
   case 1:
@@ -297,7 +297,8 @@ int if_call_function(ExecutionContext *c, char *line) {
     /* 1 parametro */
 
     // context_get(c, variavel_pilha, registrador_pilha);
-    int pos_stack = context_get_element_stack(c, param1, NULL);
+    
+    pos_stack = context_get_element_stack(c, param1, NULL);
     if(pos_stack == -1) {
       printf("ERRO: VARIAVEL NAO LOCALIZADA !!!!! [%s]\n", param1);
     }
