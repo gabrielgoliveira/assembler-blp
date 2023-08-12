@@ -5,6 +5,7 @@
 #include "./execution-context/execution_context.h"
 #include "./interpreter/interpreter.h"
 #include "./constants/formats.h"
+#include "./stack/stack.h"
 int is_verbose = 0;
 
 int is_function_declaration(char *str) {
@@ -95,6 +96,14 @@ int main() {
         context_print_vlocal_regs(&context);
         context_print_vlocal_stack(&context);
         // print_struct(&context);
+
+        // aloca a pilha
+
+        printf("# ========== STACK =========== \n");
+        context_alloc_stack(&context);
+        printf("Size Pilha : %d\n", context.stack->size);
+        context_print_stack(&context);
+        
       }
       
       continue;

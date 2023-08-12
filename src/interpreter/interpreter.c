@@ -8,12 +8,17 @@
 
 int contador_ifs = 0;
 void chamada_de_funcao(ExecutionContext *c, char *p1);
+int if_call_function(ExecutionContext *c, char *line);
 
 int recognize_line(ExecutionContext *c, char *line) {
   int index_1, index_2;
   char atr_c0, atr_c1, atr_c2, atr_cop, atr_c3, atr_c4;
   int atr_i0, atr_i1, atr_i2;
   int r = sscanf(line, "v%c%d = %c%c%d %c %c%c%d", &atr_c0, &atr_i0, &atr_c1, &atr_c2, &atr_i1, &atr_cop, &atr_c3, &atr_c4, &atr_i2);
+
+  int flag = 0;
+  flag = if_call_function(c, line);
+  if(flag == 0) return 0;
 
   // atribuicao simples
   if(r == 5) {
@@ -211,5 +216,47 @@ void chamada_de_funcao(ExecutionContext *c, char *p1){
 }
 
 
+int if_call_function(ExecutionContext *c, char *line) {
+  int index_function;
+  char param1[7], param2[7], param3[7];
+  char *str_call_function = "call f%d %s %s %s";
 
+  int n_match = sscanf(line, str_call_function, &index_function, param1, param2, param3);
+  
+  if(n_match == 0) return 0;
+
+  /*
+    1. AO CHAMAR UMA FUNCAO ALOCAR PARAMETROS NOS REGISTRADORES
+  
+  */
+  switch (n_match)
+  {
+  case 1:
+    /* nenhum parametro */
+    printf("call f%d\n", index_function);
+    break;
+  
+  case 2:
+    /* 1 parametro */
+    // context_get(c, variavel_pilha, registrador_pilha);
+    printf("call f%d\n", index_function);
+    break;
+  
+  case 3:
+    /* 2 parametros */
+    printf("call f%d\n", index_function);
+    break;
+  
+  case 4:
+    /* 3 parametros */
+    printf("call f%d\n", index_function);
+    break;
+  
+  default:
+    break;
+  }
+
+  return 1;
+
+}
 

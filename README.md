@@ -5,7 +5,7 @@
 Para compilar :
 
 ```
-gcc src/main.c src/execution-context/execution_context.c src/interpreter/interpreter.c -o tradutor
+gcc src/main.c src/stack/stack.c src/execution-context/execution_context.c src/interpreter/interpreter.c -o tradutor
 ```
 
 Executar :

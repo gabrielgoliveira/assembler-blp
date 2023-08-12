@@ -1,0 +1,7 @@
+#ifndef TYPES_INTERPRETER_H
+#define TYPES_INTERPRETER_H
+
+#define ID_TYPE_VAR_LOCAL_STACK 1
+
+
+#endif

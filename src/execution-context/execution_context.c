@@ -1,5 +1,7 @@
 #include "../constants/formats.h"
 #include "./execution_context.h"
+#include "../stack/stack.h"
+#include "../constants/types_interpreter.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,6 +22,7 @@ void context_create(ExecutionContext* c) {
   c->var_int_reg_index = (int*)malloc(sizeof(int)*4);
   c->arr_int_index = (int*)malloc(sizeof(int)*4);
   c->reg_params = (int*)malloc(sizeof(int)*3);
+  c->stack = stack_create();
   c->init = 1;
 
   // inicializa as variaveis de controle
@@ -327,3 +330,33 @@ void print_struct(ExecutionContext* c) {
   }
   printf("============\n\n");
 }
+
+void context_alloc_stack(ExecutionContext* c) {
+  int flag = 1;
+  Stack *s = c->stack;
+
+  if(flag != -1) {
+    // existem variaveis de pilha para alocar na pilha
+    for(int i = 0; i < 4; i++) {
+      if(c->var_int_stack_index[i] == -1) break;
+
+      // aloca a variavel de pilha na pilha
+      stack_push(s, ID_TYPE_VAR_LOCAL_STACK, 4, c->var_int_stack_index[i], -1);
+    }
+  }
+}
+
+
+void context_print_stack(ExecutionContext* c) {
+  int flag = c->var_int_stack_index[0];
+  Stack *s = c->stack;
+  
+  StackElement *element = s->top;
+  for(int i = 0; i < s->size; i++) {
+    if(element == NULL) break;
+    stack_print_element(element, i);
+    element = element->next;
+  }
+
+}
+

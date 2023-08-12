@@ -1,12 +1,15 @@
 #ifndef __EXECUTION_CONTEXT_H__
 #define __EXECUTION_CONTEXT_H__
 
+#include "../stack/stack.h"
+
 typedef struct {
   int *var_int_stack_index;
   int *var_int_reg_index;
   int *arr_int_index;
   int *reg_params;
   int init;
+  Stack *stack;
 } ExecutionContext;
 
 // cria estrutura de dados para guardar o contexto da funcao
@@ -47,5 +50,8 @@ void context_print_vlocal_stack(ExecutionContext* c);
 
 // printa tudo
 void print_struct(ExecutionContext* c);
+
+void context_alloc_stack(ExecutionContext* c);
+void context_print_stack(ExecutionContext* c);
 
 #endif //__EXECUTION_CONTEXT_H__
