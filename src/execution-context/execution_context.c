@@ -312,7 +312,7 @@ void context_print_vlocal_regs(ExecutionContext* c) {
   int *arr = c->var_int_reg_index;
   for (int i = 0 ; i < 4; i++) {
     if(arr[i] == -1) continue;
-    printf("# reg%d => %s\n", arr[i], regs_names[i]);
+    printf("# vr%d => %s\n", arr[i], regs_names[i]);
   }
 }
 
@@ -424,12 +424,24 @@ void context_save(ExecutionContext* c) {
   }
 
   // Salva os registradores
+  if(c->var_int_reg_index[0] != -1) {
+    for (int i = 0; i < 4; i++) {
+      if(c->var_int_reg_index[i] == -1) break;
+      // stack_push(Stack* stack, int type, int len, int index, int size_array)
+      stack_push(s, ID_TYPE_VAR_LOCAL_REG, 4, c->var_int_reg_index[i], -1);
+
+      StackElement *element;
+      element = s->top;
+  
+      printf("movq %%%s -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
+    }
+  }
+
 }
 
 /*
   Remove apenas as variaveis que nao sao de pilha mas 
 que estao na pilha e depois printa 
-
 */
 
 void context_destroy_print(ExecutionContext* c) {
@@ -452,7 +464,8 @@ int context_get_element_stack(ExecutionContext* c, char *str, char *dest_result)
     v%c%d (variavel de pilha) onde %c eh i ou a
     v%c%d (variavel de registrador) onde %c == r
 
-    OBJETIVO : movq -4(%rbp), %rsi
+    OBJETIVO : Recuperar a posicao da pilha de uma variavel 
+      movq -4(%rbp), %rsi
   */
 
   char *fmt_1 = "p%c%d";
