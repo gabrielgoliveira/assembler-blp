@@ -10,7 +10,6 @@
 int contador_ifs = 0;
 void chamada_de_funcao(ExecutionContext *c, char *p1);
 int if_call_function(ExecutionContext *c, char *line);
-
 char reg_params_name[][4] = {"rdi", "rsi", "rdx"};
 char nomes_regs_var[][4] = {"r11", "r10", "r9", "r8"};
 
