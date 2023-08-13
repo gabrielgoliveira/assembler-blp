@@ -434,7 +434,7 @@ void context_save(ExecutionContext* c, int *count) {
   if(c->reg_params[0] != -1) {
     for (int i = 0; i < 3; i++) {
       if(c->reg_params[i] == -1) break;
-      stack_push(s, ID_TYPE_PARAMS, c->reg_params[i], i+1, -1, -1);
+      stack_push(s, ID_TYPE_PARAMS, c->reg_params[i], i+1, -1, i);
       (*count)++;
       StackElement *element;
       element = s->top;
