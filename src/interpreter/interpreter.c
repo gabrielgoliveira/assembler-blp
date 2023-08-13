@@ -49,10 +49,9 @@ int recognize_line(ExecutionContext *c, char *line) {
       else if(atr_c1 == 'p') {
         //parametro
         sprintf(parametro, "pi%d", atr_i1);
-        printf("## %s\n", parametro);
+        // printf("## %s\n", parametro);
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, parametro, parametro_value);
-        printf(" -----> %s\n", parametro_value);
         printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
         return 1;
       }else {
