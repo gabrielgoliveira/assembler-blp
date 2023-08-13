@@ -1,4 +1,5 @@
 #include "../execution-context/execution_context.h"
+#include "../constants/types_interpreter.h"
 #include "./interpreter.h"
 
 #include <stdio.h>
@@ -320,20 +321,28 @@ void print_att_params(ExecutionContext *c, char *param, int index) {
   }
 }
 
-// imprimir salvamento de registradores na pilha
-void print_save_regs(ExecutionContext *c) {
-  Stack *s = c->stack;
-  StackElement *element = s->base;
-  int size = s->size;
+void context_recover(ExecutionContext *c, int count) {
+  StackElement *element;
 
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < count; i++) {
+    element = c->stack->top;
+    
+    switch (element->type) {
+      case ID_TYPE_PARAMS:
+        printf("PARAMS pos %d\n", element->index_array);
+        break;
+      
+      case ID_TYPE_VAR_LOCAL_REG:
+        printf("VAR LOCAL DE REGS\n");
+        break;
 
+      default:
+        break;
+    }
+
+    printf("-%d(%%rbp), XXXX", element->pos_stack);
+    stack_pop(c->stack);
   }
-}
-
-// imprimir recuperacao de registradores na pilha
-void print_recover_params(ExecutionContext *c, char *param, int index) {
-
 }
 
 int if_call_function(ExecutionContext *c, char *line) {
@@ -348,8 +357,8 @@ int if_call_function(ExecutionContext *c, char *line) {
   /*
     1. AO CHAMAR UMA FUNCAO ALOCAR PARAMETROS NOS REGISTRADORES
   */
-
-  context_save(c);            // salva tudo na pilha (variavel de registrador, parametros ....)
+  int count = 0;
+  context_save(c, &count);    // salva tudo na pilha (variavel de registrador, parametros ....)
   context_print_stack(c);     // imprimir a pilha
 
   // printf("==================================\n");
@@ -375,7 +384,7 @@ int if_call_function(ExecutionContext *c, char *line) {
     // resgata os parametros na pilha e move para os seus respectivos registradores
     print_att_params(c, param1, 1);
     printf("call f%d\n", index_function);
-    print_recover_params(c, param1, 1);
+  
     break;
   
   case 3: /* 2 parametros */
@@ -385,8 +394,6 @@ int if_call_function(ExecutionContext *c, char *line) {
 
     printf("call f%d\n", index_function);
 
-    print_recover_params(c, param1, 1);
-    print_recover_params(c, param2, 2);
     break;
   
   case 4:
@@ -397,14 +404,13 @@ int if_call_function(ExecutionContext *c, char *line) {
 
     printf("call f%d\n", index_function);
 
-    print_recover_params(c, param1, 1);
-    print_recover_params(c, param2, 2);
-    print_recover_params(c, param3, 3);
     break;
   
   default:
     break;
   }
+
+  context_recover(c, count);
 
   return 1;
 

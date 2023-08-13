@@ -2,7 +2,7 @@
 #define STACK_H
 
 typedef struct StackElement {
-    int type;
+    int type;                          // viN, vaN, piN, paN
     int len;
     int index;
     int size_array;

@@ -1,7 +1,5 @@
 function f3 pi1 pi2
 def
-vet va1 size ci10
-vet va2 size ci20
 var vi3
 reg vr4
 var vi5
