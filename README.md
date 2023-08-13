@@ -1,17 +1,21 @@
 # Assembler
 
-
-
 Para compilar :
 
 ```
 gcc src/main.c src/stack/stack.c src/execution-context/execution_context.c src/interpreter/interpreter.c -o tradutor
 ```
 
+ou 
+
+```
+make
+```
+
 Executar :
 
 ```
-export verbose=1 && ./tradutor < input.txt
+./tradutor < input.txt
 ```
 
 Se verbose = 1
