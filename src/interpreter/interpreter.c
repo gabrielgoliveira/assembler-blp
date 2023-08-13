@@ -57,7 +57,7 @@ int recognize_line(ExecutionContext *c, char *line) {
         //variavel inteira
         if(atr_c2 == 'i') {
           sprintf(variavel_pilha2, "vi%d", atr_i1);
-          printf("## %s\n", variavel_pilha2);
+          printf("## %s ------ \n", variavel_pilha2);
           context_get(c, variavel_pilha, registrador_pilha);
           context_get(c, variavel_pilha2, registrador_pilha2);
           printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
@@ -73,7 +73,7 @@ int recognize_line(ExecutionContext *c, char *line) {
         }
       }
     }else{ //registrador
-      sprintf(variavel_pilha, "vr%d", atr_c0, atr_i0);
+      sprintf(variavel_pilha, "vr%d", atr_i0);
       //constante
       if(atr_c1 == 'c') {
         sprintf(constante, "ci%d", atr_i1);
@@ -143,7 +143,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     else if(atr_c1 == 'p'){
       sprintf(parametro, "pi%d", atr_i1);
       context_get(c, parametro, parametro_value);
-      printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
+      printf("movl %s, %s\n", parametro_value, registrador_pilha);
     }else{
       sprintf(registrador, "v%c%d", atr_c2, atr_i1);
       context_get(c, registrador, registrador_value);
@@ -174,7 +174,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       else if(atr_c3 == 'p'){
         sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("subl %%%s, %s\n", parametro_value2, registrador_pilha);
+        printf("subl %s, %s\n", parametro_value2, registrador_pilha);
       }else{
         sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
         context_get(c, registrador2, registrador_value2);
@@ -205,7 +205,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       else if(atr_c3 == 'p'){
         sprintf(parametro, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("movl %%%s, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", parametro_value2, registrador_pilha);
+        printf("movl %s, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", parametro_value2, registrador_pilha);
         printf("movl %%eax, %s\n", registrador_pilha);
       }else{
         sprintf(registrador2, "v%c%d", atr_c4, atr_i2);

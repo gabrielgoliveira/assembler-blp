@@ -6,8 +6,21 @@ var vi5
 reg vr6
 enddef
 
+vi5 = pi1
+
+if vi5 gt pi1
+vr6 = vr4 - vi5
+endif
+
 get va3 index ci2 to vi5 
 set va3 index ci2 with vi5
+
+
+
+
+vi5 = call f2 vr4 pi1
+
+vi5 = pi1
 
 return ci5
 end
