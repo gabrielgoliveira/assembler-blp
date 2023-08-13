@@ -6,7 +6,8 @@ var vi5
 reg vr6
 enddef
 
-get va3 index ci2 to vi5
+get va3 index ci2 to vi5 
+set va3 index ci2 with vi5
 
 return ci5
 end

@@ -313,7 +313,7 @@ int recognize_line(ExecutionContext *c, char *line) {
   char tipo_da_variavel;
   int num_da_variavel, num_do_index;
   char verificar_array[4] = "";
-  char variavel_destino[4] = "";
+  char variavel_destino[10] = "";
   char constante_array[10] = "";
   char pegar_array_pilha[10] = "";
   char pegar_destino_pilha[10] = "";
@@ -330,13 +330,24 @@ int recognize_line(ExecutionContext *c, char *line) {
     printf("\n\nmovslq $%s, %%rcx\n", pegar_constante_array);
     printf("imulq $4, %%rcx\n");
     printf("leaq %s, %%rcx\n", pegar_array_pilha);
-    printf("movl (%%rcx), %s\n\n", pegar_destino_pilha);
+    printf("movl (%%rcx), %%rax\n");
+    printf("movl %%rax, %s\n\n", pegar_destino_pilha); //vi3 = va2[3]
   }
 
-  r = sscanf(line, "set %ca%d index ci%d %s", &tipo_da_variavel, &num_da_variavel, &num_do_index, &variavel_destino);
+  r = sscanf(line, "set %ca%d index ci%d with %s", &tipo_da_variavel, &num_da_variavel, &num_do_index, variavel_destino);
 
   if(r == 4){
-    ssprintf(verificar_array, "%ca%d", tipo_da_variavel, num_da_variavel);
+    sprintf(verificar_array, "%ca%d", tipo_da_variavel, num_da_variavel);
+    sprintf(constante_array, "ci%d", num_do_index);
+    context_get(c, verificar_array, pegar_array_pilha);
+    context_get(c, variavel_destino, pegar_destino_pilha);
+    context_get(c, constante_array, pegar_constante_array);
+
+    printf("\n\nmovslq $%s, %%rcx\n", pegar_constante_array);
+    printf("imulq $4, %%rcx\n");
+    printf("leaq %s, %%rcx\n", pegar_array_pilha);
+    printf("movl %s, %%rax\n", pegar_destino_pilha);
+    printf("movl %%rax, (%%rcx)\n\n", pegar_destino_pilha); //va2[3] = vi3
   }
 
   return -1;
