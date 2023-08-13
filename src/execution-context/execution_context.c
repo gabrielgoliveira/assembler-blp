@@ -207,6 +207,14 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
   
   // implementar array
 
+  if (sscanf(str, VAR_VECTOR_LOCAL, &index) == 1) {
+    int pos = context_get_element_stack(c, str, NULL);
+    char stack_str_vector[10];
+    snprintf(stack_str_vector, sizeof(stack_str_vector), "-%d(%%rbp)", pos);
+    strcpy(dest, stack_str_vector);
+
+  }
+
 }
 
 

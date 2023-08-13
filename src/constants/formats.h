@@ -4,7 +4,9 @@
 #define VAR_STACK_FORMAT "vi%d"
 #define VAR_REG_FORMAT   "vr%d"
 #define CONSTANT_FORMAT  "ci%d"
-#define PARAM_FORMAT "p%c%d"
+#define PARAM_FORMAT     "p%c%d"
+
+#define VAR_VECTOR_LOCAL "va%d"
 
 #define FUNCTION_DEF "function f%d p%c%d p%c%d p%c%d"
 
