@@ -115,12 +115,16 @@ int recognize_line(ExecutionContext *c, char *line) {
   if(r == 9){
     char variavel_pilha[20];
     char variavel_pilha2[20];
+    char registrador[20];
+    char registrador2[20];
     char constante[20];
     char constante2[20];
     char parametro[20];
     char parametro2[20];
     char registrador_pilha[20] = "";
     char registrador_pilha2[20] = "";
+    char registrador_value[20] = "";
+    char registrador_value2[20] = "";
     char constante_value[20] = "";
     char constante_value2[20] = "";
     char parametro_value[20] = "";
@@ -139,7 +143,9 @@ int recognize_line(ExecutionContext *c, char *line) {
       context_get(c, parametro, parametro_value);
       printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
     }else{
-			
+      sprintf(registrador, "v%c%d", atr_c2, atr_i1);
+      context_get(c, registrador, registrador_value);
+      printf("movl %%%s, %s\n", registrador_value, registrador_pilha);
 		}
     //Adição
     if(atr_cop == '+'){
@@ -150,6 +156,10 @@ int recognize_line(ExecutionContext *c, char *line) {
         sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
         printf("addl %%%s, %s\n", parametro_value2, registrador_pilha);
+      }else{
+        sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
+        context_get(c, registrador2, registrador_value2);
+        printf("addl %%%s, %s\n", registrador_value2, registrador_pilha);
       }
 		}
 
@@ -162,6 +172,10 @@ int recognize_line(ExecutionContext *c, char *line) {
         sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
         printf("subl %%%s, %s\n", parametro_value2, registrador_pilha);
+      }else{
+        sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
+        context_get(c, registrador2, registrador_value2);
+        printf("subl %%%s, %s\n", registrador_value2, registrador_pilha);
       }
     }
     //Multiplicação
@@ -174,6 +188,10 @@ int recognize_line(ExecutionContext *c, char *line) {
         sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
         printf("imull %%%s, %s\n", parametro_value2, registrador_pilha);
+      }else{
+        sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
+        context_get(c, registrador2, registrador_value2);
+        printf("imull %%%s, %s\n", registrador_value2, registrador_pilha);
       }
     }else{
       if(atr_c3  == 'c'){
@@ -184,6 +202,10 @@ int recognize_line(ExecutionContext *c, char *line) {
         sprintf(parametro, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
         printf("movl %%%s, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", parametro_value2, registrador_pilha);
+      }else{
+        sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
+        context_get(c, registrador2, registrador_value2);
+        printf("movl %%%s, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", registrador_value2, registrador_pilha);
       }
     }
   }
