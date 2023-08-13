@@ -1,4 +1,4 @@
-function f3 pa1 pi2
+function f3 pi1 pi2
 def
 vet va1 size ci10
 vet va2 size ci20
@@ -15,7 +15,10 @@ vi3 = ci-110 + ci10
 vi3 = ci-110 - ci10
 vi3 = ci-110 * ci10
 vi3 = ci-110 / ci10
-
+vi3 = pi1 + pi2
+vi3 = pi2 - pi1
+vi3 = pi2 * ci10
+vi3 = pi1 / ci10
 vi5 = vi3
 
 if vi5 gt vi3
