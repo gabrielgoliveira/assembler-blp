@@ -116,25 +116,26 @@ int recognize_line(ExecutionContext *c, char *line) {
     char variavel_pilha[20];
     char variavel_pilha2[20];
     char constante[20];
+    char constante2[20];
     char parametro[20];
     char parametro2[20];
     char registrador_pilha[20] = "";
     char registrador_pilha2[20] = "";
     char constante_value[20] = "";
+    char constante_value2[20] = "";
     char parametro_value[20] = "";
     char parametro_value2[20] = "";
     
     sprintf(variavel_pilha, "v%c%d", atr_c0, atr_i0);
+    context_get(c, variavel_pilha, registrador_pilha);
 
     if(atr_c1 == 'c'){
       sprintf(constante, "ci%d", atr_i1);
-      context_get(c, variavel_pilha, registrador_pilha);
       context_get(c, constante, constante_value);
-      printf("movl $%d, %s\n", constante, constante_value);
+      printf("movl $%s, %s\n", constante_value, registrador_pilha);
     }
     else if(atr_c1 == 'p'){
       sprintf(parametro, "pi%d", atr_i1);
-      context_get(c, variavel_pilha, registrador_pilha);
       context_get(c, parametro, parametro_value);
       printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
     }else{
@@ -143,52 +144,46 @@ int recognize_line(ExecutionContext *c, char *line) {
     //Adição
     if(atr_cop == '+'){
       if(atr_c3 == 'c'){
-			  printf("addl $%d, %s\n", atr_i2, constante_value);
-        printf("movl $%s, %s\n", constante_value, registrador_pilha);
+			  printf("addl $%d, %s\n", atr_i2, registrador_pilha);
       }
       else if(atr_c3 == 'p'){
-        sprintf(parametro, "pi%d", atr_i2);
+        sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("addl %%%s, %s\n", parametro2, parametro_value2);
-        printf("movl %s, %s\n", parametro_value2, registrador_pilha);
+        printf("addl %%%s, %s\n", parametro_value2, registrador_pilha);
       }
 		}
 
     //Subtração
     else if(atr_cop == '-'){
       if(atr_c3 == 'c'){
-        printf("subl $%d, %s\n", atr_i2, constante_value);
-        printf("movl $%s, %s\n", constante_value, registrador_pilha);
+        printf("subl $%d, %s\n", atr_i2, registrador_pilha);
       }
       else if(atr_c3 == 'p'){
-        sprintf(parametro, "pi%d", atr_i2);
+        sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("subl %%%s, %s\n", parametro2, parametro_value2);
-        printf("movl %s, %s\n", parametro_value2, registrador_pilha);
+        printf("subl %%%s, %s\n", parametro_value2, registrador_pilha);
       }
     }
     //Multiplicação
     else if(atr_cop == '*'){
       if(atr_c3 == 'c'){
-        printf("imull $%d, %s\n", atr_i2, constante_value);
-        printf("movl $%s, %s\n", constante_value, registrador_pilha);
+        printf("imull $%d, %s\n", atr_i2, registrador_pilha);
+        return 1;
       }
       else if(atr_c3 == 'p'){
-        sprintf(parametro, "pi%d", atr_i2);
+        sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("imull %%%s, %s\n", parametro2, parametro_value2);
-        printf("movl $%s, %s\n", parametro_value2, registrador_pilha);
+        printf("imull %%%s, %s\n", parametro_value2, registrador_pilha);
       }
     }else{
       if(atr_c3  == 'c'){
-        printf("movl $%d, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", atr_i2, constante_value);
-        printf("movl $%s, %s\n", constante_value, registrador_pilha);
+        printf("movl $%d, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", atr_i2, registrador_pilha);
+        return 1;
       }
       else if(atr_c3 == 'p'){
         sprintf(parametro, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("movl %%%s, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", parametro2, parametro_value2);
-        printf("movl $%s, %s\n", parametro_value2, registrador_pilha);
+        printf("movl %%%s, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", parametro_value2, registrador_pilha);
       }
     }
   }
