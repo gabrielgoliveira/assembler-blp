@@ -73,21 +73,28 @@ int main() {
     if(strcmp(line, "enddef\n") == 0 || strcmp(line, "enddef") == 0) {
       scope_def_locals_var = 0;
       
-      // aloca as variaveis de registradores
+
+      // aloca as variaveis de pilha
+      context_alloc_stack(&context); // aloca a pilha de acordo com as definicoes realizadas
+      
+
+      int size_stack = context_get_stack_size(&context);
+      printf("subq $%d, %%rbp\n", size_stack);
+
+      // print_stack_s(context.stack);
+      // printf("Size : %d\n", context.stack->size);
+      // aloca a pilha
+      
+
+      // print do contexto total
       printf("\n# ========== REGISTRADORES E PARAMETROS ==========\n");
       context_print_params(&context);
       context_print_vlocal_regs(&context);
       printf("# ========== END  ===================================\n");
 
-      // aloca as variaveis de pilha
-      context_alloc_stack(&context); // aloca a pilha de acordo com as definicoes realizadas
       context_print_stack(&context); // printa a pilha
 
-      int size_stack = context_get_stack_size(&context);
-      print_stack_s(context.stack);
-      printf("Size : %d\n", context.stack->size);
-      // aloca a pilha
-      printf("subq $%d, %%rbp\n", size_stack);
+
       continue;
     }
     

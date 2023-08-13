@@ -149,24 +149,24 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
     case 0:
       // r11
       // printf("%%r11\n");
-      strcpy(dest, "r11");
+      strcpy(dest, "%r11");
       break;
     case 1:
       // r10
       // printf("%%r10\n");
-      strcpy(dest, "r10");
+      strcpy(dest, "%r10");
       break;
       
     case 2:
        // r9
       // printf("%%r9\n");
-      strcpy(dest, "r9");
+      strcpy(dest, "%r9");
       break;
     
     case 3:
        // r8
       // printf("%%r8\n");
-      strcpy(dest, "r8");
+      strcpy(dest, "%r8");
       break;
     
     default:
