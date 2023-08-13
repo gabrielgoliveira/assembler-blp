@@ -181,7 +181,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       }
     }else{
       if(atr_c3  == 'c'){
-        printf("movl $%d, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", atr_i1, registrador_pilha);
+        printf("movl $%d, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", atr_i2, registrador_pilha);
         return 1;
       }
       else if(atr_c3 == 'p'){
