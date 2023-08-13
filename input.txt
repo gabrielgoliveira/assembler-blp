@@ -21,6 +21,7 @@ vi5 = vi3
 
 if vi5 gt vi3
 endif
+call f2 vr4 vi3
 
 return ci5
 end

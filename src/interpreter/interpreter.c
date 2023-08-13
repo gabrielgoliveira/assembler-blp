@@ -11,6 +11,9 @@ int contador_ifs = 0;
 void chamada_de_funcao(ExecutionContext *c, char *p1);
 int if_call_function(ExecutionContext *c, char *line);
 
+char reg_params_name[][4] = {"rdi", "rsi", "rdx"};
+char nomes_regs_var[][4] = {"r11", "r10", "r9", "r8"};
+
 int recognize_line(ExecutionContext *c, char *line) {
   int index_1, index_2;
   char atr_c0, atr_c1, atr_c2, atr_cop, atr_c3, atr_c4;
@@ -46,10 +49,9 @@ int recognize_line(ExecutionContext *c, char *line) {
       else if(atr_c1 == 'p') {
         //parametro
         sprintf(parametro, "pi%d", atr_i1);
-        printf("## %s\n", parametro);
+        // printf("## %s\n", parametro);
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, parametro, parametro_value);
-        printf(" -----> %s\n", parametro_value);
         printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
         return 1;
       }else {
@@ -99,7 +101,7 @@ int recognize_line(ExecutionContext *c, char *line) {
           context_get(c, variavel_pilha2, registrador_pilha2);
           printf("movl %s, %s\n", registrador_pilha2, registrador_pilha);
           return 1;
-        }else {
+        } else {
           //registrador, verificar essa parte ainda
           sprintf(variavel_pilha2, "vr%d", atr_i1);
           printf("## %s\n", variavel_pilha2);
@@ -332,7 +334,7 @@ void chamada_de_funcao(ExecutionContext *c, char *p1){
 // imprimir atribuicao de parametros para os registradores
 void print_att_params(ExecutionContext *c, char *param, int index) {
   int pos_stack;
-  char reg_params_name[][4] = {"rdi", "rsi", "rdx"};
+  // char reg_params_name[][4] = {"rdi", "rsi", "rdx"};
   if(param != NULL) {
     pos_stack = context_get_element_stack(c, param, NULL); // pega a posicao na pilha
     if(pos_stack == -1) {
@@ -351,18 +353,19 @@ void context_recover(ExecutionContext *c, int count) {
     
     switch (element->type) {
       case ID_TYPE_PARAMS:
-        printf("PARAMS pos %d\n", element->index_array);
+        printf("mov -%d(%%rbp), %s\n", element->pos_stack, reg_params_name[element->index_array]);
         break;
       
       case ID_TYPE_VAR_LOCAL_REG:
-        printf("VAR LOCAL DE REGS\n");
+        printf("mov -%d(%%rbp), %s\n", element->pos_stack, nomes_regs_var[element->index_array]);
         break;
 
       default:
+        printf("[ERROR]\n");
         break;
     }
 
-    printf("-%d(%%rbp), XXXX", element->pos_stack);
+    
     stack_pop(c->stack);
   }
 }
