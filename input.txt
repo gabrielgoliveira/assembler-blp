@@ -10,8 +10,11 @@ enddef
 
 vi3 = pi2 
 vi3 = call f2 ci1 vi3
-
-vi3 = ci-110
+vi5 = ci-110
+vi3 = ci-110 + ci10
+vi3 = ci-110 - ci10
+vi3 = ci-110 * ci10
+vi3 = ci-110 / ci10
 
 vi5 = vi3
 

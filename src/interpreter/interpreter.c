@@ -113,6 +113,7 @@ int recognize_line(ExecutionContext *c, char *line) {
 
   //Operações
   if(r == 9){
+    printf("-----------------------\n\n");
     char variavel_pilha[20];
     char variavel_pilha2[20];
     char constante[20];
@@ -133,14 +134,14 @@ int recognize_line(ExecutionContext *c, char *line) {
       sprintf(constante, "ci%d", atr_i1);
       context_get(c, constante, constante_value);
       printf("movl $%s, %s\n", constante_value, registrador_pilha);
-      return 1;
+      
     }
     else if(atr_c1 == 'p'){
       sprintf(parametro, "pi%d", atr_i1);
       context_get(c, variavel_pilha, registrador_pilha);
       context_get(c, parametro, parametro_value);
       printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
-      return 1;
+      
     }else{
 			
 		}
@@ -148,7 +149,6 @@ int recognize_line(ExecutionContext *c, char *line) {
     if(atr_cop == '+'){
       if(atr_c3 == 'c'){
 			  printf("addl $%d, %s\n", atr_i2, registrador_pilha);
-        return 1;
       }
       else if(atr_c3 == 'p'){
         sprintf(parametro, "pi%d", atr_i2);
@@ -162,7 +162,6 @@ int recognize_line(ExecutionContext *c, char *line) {
     else if(atr_cop == '-'){
       if(atr_c3 == 'c'){
         printf("subl $%d, %s\n", atr_i2, registrador_pilha);
-        return 1;
       }
       else if(atr_c3 == 'p'){
         sprintf(parametro, "pi%d", atr_i2);
@@ -175,7 +174,6 @@ int recognize_line(ExecutionContext *c, char *line) {
     else if(atr_cop == '*'){
       if(atr_c3 == 'c'){
         printf("imull $%d, %s\n", atr_i1, registrador_pilha);
-        return 1;
       }
       else if(atr_c3 == 'p'){
         sprintf(parametro, "pi%d", atr_i2);
@@ -195,6 +193,7 @@ int recognize_line(ExecutionContext *c, char *line) {
         printf("movl $%s, %s\n", parametro_value2, registrador_pilha);
       }
     }
+    return 1;
   }
     
   //retorno de constante
