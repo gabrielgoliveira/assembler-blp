@@ -37,10 +37,12 @@ void stack_push(Stack* stack, int type, int len, int index, int size_array, int 
       stack->base = newElement;
       newElement->next = NULL;
       newElement->prev = NULL;
-
+      
       // define a posicao na pilha
       if(newElement->type < 10) {
         newElement->pos_stack = 4;
+      } else if (newElement->type == ID_TYPE_ARR_LOCAL){
+        newElement->pos_stack = size_array;
       } else {
         newElement->pos_stack = 8;
       }
@@ -54,6 +56,8 @@ void stack_push(Stack* stack, int type, int len, int index, int size_array, int 
 
       if(newElement->type < 10) {
         newElement->pos_stack = 4 + pos_stack_old;
+      } else if (newElement->type == ID_TYPE_ARR_LOCAL){
+        newElement->pos_stack = 8 + size_array;
       } else {
         newElement->pos_stack = 8 + pos_stack_old;
       }

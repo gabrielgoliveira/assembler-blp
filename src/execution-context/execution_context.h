@@ -59,4 +59,6 @@ void context_save(ExecutionContext* c, int *count);
 
 int context_get_element_stack(ExecutionContext* c, char *str, char *dest_result);
 
+int context_get_stack_size(ExecutionContext* c);
+
 #endif //__EXECUTION_CONTEXT_H__

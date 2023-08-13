@@ -94,10 +94,10 @@ void context_alloc(ExecutionContext* c, char *str) {
       printf("Error: Nao foi possivel alocar a variavel de registrador %s\n", str);
     }
     c->arr_int_size[response] = size_array;
-    printf("=================================================\n");
-    printf("DECLARACAO DE ARRAY\n");
-    printf("TAM : %d, INDEX ARR: %d\n", c->arr_int_size[response], c->arr_int_index[response]);
-    printf("=================================================\n");
+    // printf("=================================================\n");
+    // printf("DECLARACAO DE ARRAY\n");
+    // printf("TAM : %d, INDEX ARR: %d\n", c->arr_int_size[response], c->arr_int_index[response]);
+    // printf("=================================================\n");
     return ;
   }
   
@@ -204,7 +204,9 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
     }
     strcpy(dest, "##### !!!!");
   }
+  
   // implementar array
+
 }
 
 
@@ -388,6 +390,50 @@ void context_alloc_stack(ExecutionContext* c) {
       stack_push(s, ID_TYPE_VAR_LOCAL_STACK, 4, c->var_int_stack_index[i], -1, -1);
     }
   }
+
+  int index = -1;
+  int len = -1;
+
+  flag = c->arr_int_index[0];
+  if(flag != -1) {
+    // alocar vetores na pilha
+    for(int i = 0; i < 4; i++) {
+      if(c->arr_int_index[i] == -1) break;
+
+      index = c->arr_int_index[i];
+      len = c->arr_int_size[i];
+      
+      /*
+        void stack_push(
+          Stack* stack,
+          int type,
+          int len,
+          int index,
+          int size_array,
+          int pos_array
+        )
+      */
+
+      stack_push(s, ID_TYPE_ARR_LOCAL, 4, index, len*4, i);
+    }
+  }
+}
+
+int context_get_stack_size(ExecutionContext* c) {
+  Stack *s = c->stack;
+  StackElement *element = s->base;
+  int size_stack = 0;
+  for(int i = 0; i < s->size; i++) {
+    if(element == NULL) break;
+    if(element->size_array != -1) {
+      size_stack += element->size_array;
+    } else {
+      size_stack += element->len;
+    }
+    element = element->next;
+  }
+
+  return size_stack;
 }
 
 
@@ -429,6 +475,11 @@ void context_print_stack(ExecutionContext* c) {
       int pos_stack = element->pos_stack;
 
       printf("## vr%d => -%d(%%rbp)\n", index, pos_stack);
+    } else if (element->type == ID_TYPE_ARR_LOCAL) {
+      int index = element->index;
+      int pos_stack = element->pos_stack;
+
+      printf("## va%d => -%d(%%rbp)\n", index, pos_stack);
     }
     
     element = element->next;
