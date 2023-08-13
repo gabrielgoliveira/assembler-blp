@@ -108,7 +108,7 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
     // eh uma variavel de pilha
     int pos = _indexof(c->var_int_stack_index, 4, index);
     if(pos == -1) {
-      printf("Erro : nao foi possivel encontrar a variavel de pilha\n");
+      printf("Erro : nao foi possivel encontrar a variavel de pilha [%s]\n", str);
     }
 
     int pos_stack = context_get_element_stack(c, str, NULL);
@@ -122,9 +122,9 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
 
   if(sscanf(str, VAR_REG_FORMAT, &index) == 1) {
     // eh uma variavel de registrador
-    int pos = _indexof(c->var_int_stack_index, 4, index);
+    int pos = _indexof(c->var_int_reg_index, 4, index);
     if(pos == -1) {
-      printf("Erro : nao foi possivel encontrar a variavel de pilha\n");
+      printf("Erro : nao foi possivel encontrar a variavel de pilha[%s]\n", str);
     }
     
     switch (pos)

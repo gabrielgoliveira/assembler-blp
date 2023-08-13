@@ -12,6 +12,7 @@ void chamada_de_funcao(ExecutionContext *c, char *p1);
 int if_call_function(ExecutionContext *c, char *line);
 
 char reg_params_name[][4] = {"rdi", "rsi", "rdx"};
+char nomes_regs_var[][4] = {"r11", "r10", "r9", "r8"};
 
 int recognize_line(ExecutionContext *c, char *line) {
   int index_1, index_2;
@@ -353,11 +354,11 @@ void context_recover(ExecutionContext *c, int count) {
     
     switch (element->type) {
       case ID_TYPE_PARAMS:
-        printf("PARAMS pos %d\n", element->index_array);
+        printf("mov -%d(%%rbp), %s\n", element->pos_stack, reg_params_name[element->index_array]);
         break;
       
       case ID_TYPE_VAR_LOCAL_REG:
-        printf("VAR LOCAL DE REGS\n");
+        printf("mov -%d(%%rbp), %s\n", element->pos_stack, nomes_regs_var[element->index_array]);
         break;
 
       default:
@@ -365,7 +366,7 @@ void context_recover(ExecutionContext *c, int count) {
         break;
     }
 
-    printf("mov -%d(%%rbp), %s\n", element->pos_stack, "");
+    
     stack_pop(c->stack);
   }
 }
