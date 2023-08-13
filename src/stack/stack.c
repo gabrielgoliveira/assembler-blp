@@ -57,7 +57,7 @@ void stack_push(Stack* stack, int type, int len, int index, int size_array, int 
       if(newElement->type < 10) {
         newElement->pos_stack = 4 + pos_stack_old;
       } else if (newElement->type == ID_TYPE_ARR_LOCAL){
-        newElement->pos_stack = 8 + size_array;
+        newElement->pos_stack = pos_stack_old + size_array;
       } else {
         newElement->pos_stack = 8 + pos_stack_old;
       }
