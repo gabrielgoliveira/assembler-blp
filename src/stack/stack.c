@@ -72,7 +72,7 @@ void stack_pop(Stack* stack) {
     }
 
     StackElement* temp = stack->top;
-    stack->top = stack->top->next;
+    stack->top = stack->top->prev;
     stack->size--;
 
     if (!stack->top) {

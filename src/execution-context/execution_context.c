@@ -423,7 +423,7 @@ void context_print_stack(ExecutionContext* c) {
 /*
   Salva o contexto atual da execucao
 */
-void context_save(ExecutionContext* c) {
+void context_save(ExecutionContext* c, int *count) {
   Stack *s = c->stack;
   char nomes_registradores[][4] = {"rdi", "rsi", "rdx"};
   char nomes_regs_var[][4] = {"r11", "r10", "r9", "r8"};
@@ -435,6 +435,7 @@ void context_save(ExecutionContext* c) {
     for (int i = 0; i < 3; i++) {
       if(c->reg_params[i] == -1) break;
       stack_push(s, ID_TYPE_PARAMS, c->reg_params[i], i+1, -1, -1);
+      (*count)++;
       StackElement *element;
       element = s->top;
       if(c->reg_params[i] < 8) {
@@ -456,7 +457,7 @@ void context_save(ExecutionContext* c) {
       if(c->var_int_reg_index[i] == -1) break;
       // stack_push(Stack* stack, int type, int len, int index, int size_array)
       stack_push(s, ID_TYPE_VAR_LOCAL_REG, 4, c->var_int_reg_index[i], -1, i);
-
+      (*count)++;
       StackElement *element;
       element = s->top;
       
