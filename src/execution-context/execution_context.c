@@ -148,25 +148,25 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
     {
     case 0:
       // r11
-      break;
       // printf("%%r11\n");
-      strcpy(dest, "%%r11");
+      strcpy(dest, "r11");
+      break;
     case 1:
       // r10
       // printf("%%r10\n");
-      strcpy(dest, "%%r10");
+      strcpy(dest, "r10");
       break;
       
     case 2:
        // r9
       // printf("%%r9\n");
-      strcpy(dest, "%%r9");
+      strcpy(dest, "r9");
       break;
     
     case 3:
        // r8
       // printf("%%r8\n");
-      strcpy(dest, "%%r8");
+      strcpy(dest, "r8");
       break;
     
     default:
@@ -433,6 +433,21 @@ int context_get_stack_size(ExecutionContext* c) {
     element = element->next;
   }
 
+  if(c->reg_params[0] != -1) {
+    for(int i = 0; i < 3; i++) {
+      // espaco para salvar os registradores de parametro
+      if(c->reg_params[i] == -1) break;
+      size_stack += 8;
+    }
+  }
+  
+  if(c->var_int_reg_index[0] != -1) {
+    for(int i = 0; i < 4; i++) {
+      // espaco para salvar as variaveis de registrador
+      if(c->var_int_reg_index[i] == -1) break;
+      size_stack += 8;
+    }
+  }
   return size_stack;
 }
 
