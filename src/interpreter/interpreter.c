@@ -132,7 +132,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     if(atr_c1 == 'c'){
       sprintf(constante, "ci%d", atr_i1);
       context_get(c, constante, constante_value);
-      printf("movl $%s, %s\n", constante_value, registrador_pilha2);
+      printf("movl $%s, %s\n", constante_value, registrador_pilha);
       return 1;
     }
     else if(atr_c1 == 'p'){
@@ -147,9 +147,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     //Adição
     if(atr_cop == '+'){
       if(atr_c3 == 'c'){
-        context_get(c, constante2, constante_value2);
-			  printf("addl $%d, %s\n", constante2, constante_value2);
-        printf("movl $%s, %s\n", constante_value2, registrador_pilha);
+			  printf("addl $%d, %s\n", atr_i2, registrador_pilha);
         return 1;
       }
       else if(atr_c3 == 'p'){
@@ -163,9 +161,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     //Subtração
     else if(atr_cop == '-'){
       if(atr_c3 == 'c'){
-        context_get(c, constante2, constante_value2);
-        printf("subl $%d, %s\n", constante2, constante_value2);
-        printf("movl %s, %s\n", constante_value2, registrador_pilha);
+        printf("subl $%d, %s\n", atr_i2, registrador_pilha);
         return 1;
       }
       else if(atr_c3 == 'p'){
@@ -178,9 +174,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     //Multiplicação
     else if(atr_cop == '*'){
       if(atr_c3 == 'c'){
-        context_get(c, constante2, constante_value2);
-        printf("imull $%d, %s\n", constante2, constante_value2);
-        printf("movl %s, %s\n", constante_value2, registrador_pilha);
+        printf("imull $%d, %s\n", atr_i1, registrador_pilha);
         return 1;
       }
       else if(atr_c3 == 'p'){
@@ -191,9 +185,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       }
     }else{
       if(atr_c3  == 'c'){
-        context_get(c, constante2, constante_value2);
-        printf("movl $%d, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", constante2, constante_value2);
-        printf("movl %s, %s\n", constante_value2, registrador_pilha);
+        printf("movl $%d, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", atr_i1, registrador_pilha);
         return 1;
       }
       else if(atr_c3 == 'p'){
