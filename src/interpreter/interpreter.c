@@ -351,9 +351,9 @@ void context_recover(ExecutionContext *c, int count) {
   for (int i = 0; i < count; i++) {
     element = c->stack->top;
     
-    switch (element->type)  {
+    switch (element->type) {
       case ID_TYPE_PARAMS:
-        printf("PARAMS pos -- (%d)\n", element->index_array);
+        printf("PARAMS pos %d\n", element->index_array);
         break;
       
       case ID_TYPE_VAR_LOCAL_REG:
