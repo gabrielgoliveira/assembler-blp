@@ -148,7 +148,8 @@ int recognize_line(ExecutionContext *c, char *line) {
     }else{
       sprintf(registrador, "v%c%d", atr_c2, atr_i1);
       context_get(c, registrador, registrador_value);
-      printf("movl %s, %s\n", registrador_value, registrador_pilha);
+      if(strcmp(registrador_value, registrador_pilha))
+        printf("movl %s, %s\n", registrador_value, registrador_pilha);
 		}
     //Adição
     if(atr_cop == '+'){
