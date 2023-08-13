@@ -146,7 +146,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     }else{
       sprintf(registrador, "v%c%d", atr_c2, atr_i1);
       context_get(c, registrador, registrador_value);
-      printf("movl %%%s, %s\n", registrador_value, registrador_pilha);
+      printf("movl %s, %s\n", registrador_value, registrador_pilha);
 		}
     //Adição
     if(atr_cop == '+'){
@@ -156,11 +156,11 @@ int recognize_line(ExecutionContext *c, char *line) {
       else if(atr_c3 == 'p'){
         sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("addl %%%s, %s\n", parametro_value2, registrador_pilha);
+        printf("addl %s, %s\n", parametro_value2, registrador_pilha);
       }else{
         sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
         context_get(c, registrador2, registrador_value2);
-        printf("addl %%%s, %s\n", registrador_value2, registrador_pilha);
+        printf("addl %s, %s\n", registrador_value2, registrador_pilha);
       }
 		}
 
@@ -176,7 +176,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       }else{
         sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
         context_get(c, registrador2, registrador_value2);
-        printf("subl %%%s, %s\n", registrador_value2, registrador_pilha);
+        printf("subl %s, %s\n", registrador_value2, registrador_pilha);
       }
     }
     //Multiplicação
@@ -188,11 +188,11 @@ int recognize_line(ExecutionContext *c, char *line) {
       else if(atr_c3 == 'p'){
         sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("imull %%%s, %s\n", parametro_value2, registrador_pilha);
+        printf("imull %s, %s\n", parametro_value2, registrador_pilha);
       }else{
         sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
         context_get(c, registrador2, registrador_value2);
-        printf("imull %%%s, %s\n", registrador_value2, registrador_pilha);
+        printf("imull %s, %s\n", registrador_value2, registrador_pilha);
       }
     }else{
       if(atr_c3  == 'c'){
@@ -206,7 +206,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       }else{
         sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
         context_get(c, registrador2, registrador_value2);
-        printf("movl %%%s, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", registrador_value2, registrador_pilha);
+        printf("movl %s, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", registrador_value2, registrador_pilha);
       }
     }
   }
