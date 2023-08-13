@@ -7,6 +7,7 @@ typedef struct StackElement {
     int index;
     int size_array;
     int pos_stack;
+    int index_array;
     struct StackElement* prev;
     struct StackElement* next;
 } StackElement;
@@ -18,7 +19,7 @@ typedef struct Stack {
 } Stack;
 
 Stack* stack_create();
-void stack_push(Stack* stack, int type, int len, int index, int size_array);
+void stack_push(Stack* stack, int type, int len, int index, int size_array, int pos_array);
 void stack_pop(Stack* stack);
 StackElement* stack_peek(Stack* stack);
 int stack_isEmpty(Stack* stack);
