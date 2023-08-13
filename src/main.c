@@ -37,16 +37,11 @@ int main() {
   int id_function = 0, temp = 0;
   char line[length];
 
-  char* env_verbose = getenv("verbose");
   
   // declara estrutura de controle de contexto
   ExecutionContext context;
-  
-  // verifica se esta no modo verbose e ativa o modo
-  if(strcmp(env_verbose, "1") == 0) {
-    is_verbose = 1;
-    printf("# verbose mode: active\n");
-  }
+
+  is_verbose = 1;
 
   while (fgets(line, length, stdin) != NULL) {
     // if(is_verbose) printf("# line : %s\n", line);

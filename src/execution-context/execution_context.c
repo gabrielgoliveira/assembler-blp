@@ -20,6 +20,7 @@ a alocacao se da de forma que :
 void context_create(ExecutionContext* c) {
   c->var_int_stack_index = (int*)malloc(sizeof(int)*4);
   c->arr_int_index = (int*)malloc(sizeof(int)*4);
+  c->arr_int_size = (int*)malloc(sizeof(int)*4);
   c->var_int_reg_index = (int*)malloc(sizeof(int)*4);
   c->reg_params = (int*)malloc(sizeof(int)*3);
   c->stack = stack_create();
@@ -30,6 +31,7 @@ void context_create(ExecutionContext* c) {
     c->var_int_stack_index[i] = -1;
     c->var_int_reg_index[i] = -1;
     c->arr_int_index[i] = -1;
+    c->arr_int_size[i] = -1;
 
     if(i < 3) {
       c->reg_params[i] = -1;
@@ -50,7 +52,7 @@ int alloc_vector(int *vector, int len, int value) {
   for(int i = 0; i < len; i++) {
     if(vector[i] == -1) {
       vector[i] = value;
-      return 1;
+      return i;
     }
   }
 
@@ -64,6 +66,7 @@ void context_alloc(ExecutionContext* c, char *str) {
   }
   
   int index = 0;
+  int size_array = -1;
 
   if(sscanf(str, FMT_STACK_LOCAL_VAR, &index) == 1) {
     // eh uma variavel de pilha
@@ -81,6 +84,20 @@ void context_alloc(ExecutionContext* c, char *str) {
     if(response == -1) {
       printf("Error: Nao foi possivel alocar a variavel de registrador %s\n", str);
     }
+    return ;
+  }
+
+  if(sscanf(str, FMT_VET_LOCAL_VAR, &index, &size_array) == 2) {
+    // eh uma variavel de registrador
+    int response = alloc_vector(c->arr_int_index, 4, index);
+    if(response == -1) {
+      printf("Error: Nao foi possivel alocar a variavel de registrador %s\n", str);
+    }
+    c->arr_int_size[response] = size_array;
+    printf("=================================================\n");
+    printf("DECLARACAO DE ARRAY\n");
+    printf("TAM : %d, INDEX ARR: %d\n", c->arr_int_size[response], c->arr_int_index[response]);
+    printf("=================================================\n");
     return ;
   }
   
