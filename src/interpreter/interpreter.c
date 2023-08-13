@@ -310,12 +310,33 @@ int recognize_line(ExecutionContext *c, char *line) {
   }
 
   //Operacoes GET TO
-  char tipo_da_variavel, tipo_variavel_destino;
-  int num_da_variavel, num_do_index, num_da_variavel_destino;
+  char tipo_da_variavel;
+  int num_da_variavel, num_do_index;
+  char verificar_array[4] = "";
+  char variavel_destino[4] = "";
+  char constante_array[10] = "";
+  char pegar_array_pilha[10] = "";
+  char pegar_destino_pilha[10] = "";
+  char pegar_constante_array[10] = "";
 
-  r = sscanf(line, "get v%c%d index ci%d to %ci%d", &tipo_da_variavel, &num_da_variavel, &num_do_index, &tipo_variavel_destino, &num_da_variavel_destino);
-  if(r == 5){
+  r = sscanf(line, "get %ca%d index ci%d to %s", &tipo_da_variavel, &num_da_variavel, &num_do_index, variavel_destino);
+  if(r == 4){
+    sprintf(verificar_array, "%ca%d", tipo_da_variavel, num_da_variavel);
+    sprintf(constante_array, "ci%d", num_do_index);
+    context_get(c, verificar_array, pegar_array_pilha);
+    context_get(c, variavel_destino, pegar_destino_pilha);
+    context_get(c, constante_array, pegar_constante_array);
 
+    printf("\n\nmovslq $%s, %%rcx\n", pegar_constante_array);
+    printf("imulq $4, %%rcx\n");
+    printf("leaq %s, %%rcx\n", pegar_array_pilha);
+    printf("movl (%%rcx), %s\n\n", pegar_destino_pilha);
+  }
+
+  r = sscanf(line, "set %ca%d index ci%d %s", &tipo_da_variavel, &num_da_variavel, &num_do_index, &variavel_destino);
+
+  if(r == 4){
+    ssprintf(verificar_array, "%ca%d", tipo_da_variavel, num_da_variavel);
   }
 
   return -1;

@@ -1,27 +1,12 @@
 function f3 pi1 pi2
 def
-var vi3
+vet va3 size ci10
 reg vr4
 var vi5
 reg vr6
 enddef
 
-vi3 = pi2 
-vi3 = call f2 ci1 vi3
-vi5 = ci-110
-vi3 = ci-110 + ci10
-vi3 = ci-110 - ci10
-vi3 = ci-110 * ci10
-vi3 = ci-110 / ci10
-vi3 = pi1 + pi2
-vi3 = pi2 - pi1
-vi3 = pi2 * ci10
-vi3 = pi1 / ci10
-vi5 = vi3
-
-if vi5 gt vi3
-endif
-call f2 vr4 vi3
+get va3 index ci2 to vi5
 
 return ci5
 end
