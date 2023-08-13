@@ -130,13 +130,15 @@ int recognize_line(ExecutionContext *c, char *line) {
       sprintf(constante, "ci%d", atr_i1);
       context_get(c, variavel_pilha, registrador_pilha);
       context_get(c, constante, constante_value);
-      printf("movl $%d, %s\n", constante, constante_value);
+      printf("movl $%s, %s\n", constante_value, registrador_pilha);
+      return 1;
     }
     else if(atr_c1 == 'p'){
       sprintf(parametro, "pi%d", atr_i1);
       context_get(c, variavel_pilha, registrador_pilha);
       context_get(c, parametro, parametro_value);
       printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
+      return 1;
     }else{
 			
 		}
@@ -145,6 +147,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       if(atr_c3 == 'c'){
 			  printf("addl $%d, %s\n", atr_i2, constante_value);
         printf("movl $%s, %s\n", constante_value, registrador_pilha);
+        return 1;
       }
       else if(atr_c3 == 'p'){
         sprintf(parametro, "pi%d", atr_i2);
@@ -159,6 +162,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       if(atr_c3 == 'c'){
         printf("subl $%d, %s\n", atr_i2, constante_value);
         printf("movl $%s, %s\n", constante_value, registrador_pilha);
+        return 1;
       }
       else if(atr_c3 == 'p'){
         sprintf(parametro, "pi%d", atr_i2);
@@ -172,6 +176,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       if(atr_c3 == 'c'){
         printf("imull $%d, %s\n", atr_i2, constante_value);
         printf("movl $%s, %s\n", constante_value, registrador_pilha);
+        return 1;
       }
       else if(atr_c3 == 'p'){
         sprintf(parametro, "pi%d", atr_i2);
@@ -183,6 +188,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       if(atr_c3  == 'c'){
         printf("movl $%d, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", atr_i2, constante_value);
         printf("movl $%s, %s\n", constante_value, registrador_pilha);
+        return 1;
       }
       else if(atr_c3 == 'p'){
         sprintf(parametro, "pi%d", atr_i2);
