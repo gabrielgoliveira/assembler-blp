@@ -16,17 +16,20 @@ Stack* stack_create() {
     return stack;
 }
 
-void stack_push(Stack* stack, int type, int len, int index, int size_array) {
+void stack_push(Stack* stack, int type, int len, int index, int size_array, int pos_array) {
     StackElement* newElement = (StackElement*)malloc(sizeof(StackElement));
+    
     if (!newElement) {
         printf("Erro ao alocar memória para um novo elemento da pilha.\n");
         exit(1);
     }
+
     newElement->type = type;
     newElement->len = len;
     newElement->index = index;
     newElement->size_array = size_array;
     newElement->next = stack->top;
+    newElement->index_array = pos_array;
 
     StackElement* oldElement = stack->top;
 
@@ -100,18 +103,7 @@ void stack_destroy(Stack* stack) {
 }
 
 void stack_print_element(StackElement *element, int pos) {
-  if(element->type == ID_TYPE_VAR_LOCAL_STACK) {
-    // variavel local de pilha
 
-    int index = element->index;
-    int pos_stack = element->pos_stack;
-    printf("## vi%d => -%d(%%rbp)\n", index, pos_stack);
-
-  } else if (element->type == ID_TYPE_PARAMS) {
-    int index = element->index;
-    int pos_stack = element->pos_stack;
-    printf("## pi%d => -%d(%%rbp)\n", index, pos_stack);
-  }
 }
 
 void print_stack_s(Stack *s) {

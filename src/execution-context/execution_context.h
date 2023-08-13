@@ -4,12 +4,12 @@
 #include "../stack/stack.h"
 
 typedef struct {
-  int *var_int_stack_index;
-  int *var_int_reg_index;
-  int *arr_int_index;
-  int *reg_params;
-  int init;
-  Stack *stack;
+  int *var_int_stack_index;   // Array de indice da variavel de pilha 
+  int *var_int_reg_index;     // Array de indice de variavel de registrador
+  int *arr_int_index;         // Array de indices de arrays
+  int *reg_params;            // Array de parametros, cada posicao guarda o tamanho 4 ou 8
+  int init;                   // Se a estrutura foi iniciada
+  Stack *stack;               // Ponteiro para a pilha
 } ExecutionContext;
 
 // cria estrutura de dados para guardar o contexto da funcao

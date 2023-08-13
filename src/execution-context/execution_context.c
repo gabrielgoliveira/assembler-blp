@@ -45,6 +45,7 @@ void context_free(ExecutionContext* c) {
     free(c->reg_params);
 }
 
+/* INSERT VECTOR */
 int alloc_vector(int *vector, int len, int value) {
   for(int i = 0; i < len; i++) {
     if(vector[i] == -1) {
@@ -351,15 +352,12 @@ void print_struct(ExecutionContext* c) {
   printf("============\n\n");
 }
 
-/*
-  ==============================================================================================================
-
-*/
 
 /*
   Essa funcao deve ser chamada apos a definicao de variaveis
 ela analisa o que precisa ser alocado na pilha
 */
+
 void context_alloc_stack(ExecutionContext* c) {
   int flag = c->var_int_stack_index[0];
   Stack *s = c->stack;
@@ -370,7 +368,7 @@ void context_alloc_stack(ExecutionContext* c) {
       if(c->var_int_stack_index[i] == -1) break;
 
       // aloca a variavel de pilha na pilha
-      stack_push(s, ID_TYPE_VAR_LOCAL_STACK, 4, c->var_int_stack_index[i], -1);
+      stack_push(s, ID_TYPE_VAR_LOCAL_STACK, 4, c->var_int_stack_index[i], -1, -1);
     }
   }
 }
@@ -379,20 +377,47 @@ void context_alloc_stack(ExecutionContext* c) {
 /*
   Printa a pilha
 */
+
+/*
+  if(element->index_array != NULL && element->index_array != -1) {
+    nome = nomes_regs_var[element->index_array];
+  }
+*/
+
 void context_print_stack(ExecutionContext* c) {
+  char nomes_regs_var[][4] = {"r11", "r10", "r9", "r8"};
+  char *nome;
+
   printf("\n\n## ----------- STACK ---------------\n");
   int flag = c->var_int_stack_index[0];
+
   Stack *s = c->stack;
-  
   StackElement *element = s->base;
+  
   for(int i = 0; i < s->size; i++) {
     if(element == NULL) break;
-    stack_print_element(element, i);
+
+    if(element->type == ID_TYPE_VAR_LOCAL_STACK) {
+      // variavel local de pilha
+      int index = element->index;
+      int pos_stack = element->pos_stack;
+      printf("## vi%d => -%d(%%rbp)\n", index, pos_stack);
+
+    } else if (element->type == ID_TYPE_PARAMS) {
+      int index = element->index;
+      int pos_stack = element->pos_stack;
+      printf("## pi%d => -%d(%%rbp)\n", index, pos_stack);
+    } else if (element->type == ID_TYPE_VAR_LOCAL_REG) {
+      int index = element->index;
+      int pos_stack = element->pos_stack;
+
+      printf("## vr%d => -%d(%%rbp)\n", index, pos_stack);
+    }
+    
     element = element->next;
   }
 
   printf("## ----------- END STACK -----------\n\n");
-
 }
 
 /*
@@ -401,39 +426,41 @@ void context_print_stack(ExecutionContext* c) {
 void context_save(ExecutionContext* c) {
   Stack *s = c->stack;
   char nomes_registradores[][4] = {"rdi", "rsi", "rdx"};
+  char nomes_regs_var[][4] = {"r11", "r10", "r9", "r8"};
+
   printf("# => salvando na pilha\n");
 
   // Salva os parametros da funcao
   if(c->reg_params[0] != -1) {
     for (int i = 0; i < 3; i++) {
       if(c->reg_params[i] == -1) break;
-      stack_push(s, ID_TYPE_PARAMS, c->reg_params[i], i+1, -1);
+      stack_push(s, ID_TYPE_PARAMS, c->reg_params[i], i+1, -1, -1);
       StackElement *element;
       element = s->top;
       if(c->reg_params[i] < 8) {
         // imprime a operacao de salvar o registrador na pilha
         nomes_registradores[i][0] = 'e';
-        printf("movq %%%s -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
+        printf("movq %%%s, -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
 
       } else {
-        printf("movq %%%s -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
+        printf("movq %%%s, -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
       }
       
       // printf("movq pi%d -%d(%%rsp)\n", i+1, element->pos_stack);
     }
   }
 
-  // Salva os registradores
+  // Salva as variaveis de registradores
   if(c->var_int_reg_index[0] != -1) {
     for (int i = 0; i < 4; i++) {
       if(c->var_int_reg_index[i] == -1) break;
       // stack_push(Stack* stack, int type, int len, int index, int size_array)
-      stack_push(s, ID_TYPE_VAR_LOCAL_REG, 4, c->var_int_reg_index[i], -1);
+      stack_push(s, ID_TYPE_VAR_LOCAL_REG, 4, c->var_int_reg_index[i], -1, i);
 
       StackElement *element;
       element = s->top;
-  
-      printf("movq %%%s -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
+      
+      printf("movq %%%s, -%d(%%rbp)\n", nomes_regs_var[i], element->pos_stack);
     }
   }
 
