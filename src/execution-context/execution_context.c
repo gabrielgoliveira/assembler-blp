@@ -419,6 +419,17 @@ void context_alloc_stack(ExecutionContext* c) {
   }
 }
 
+int _verifica_alinhamento(int value) {
+  if(value % 16 == 0) return value;
+
+  while(value % 16 != 0) {
+    value++;
+  }
+
+  return value;
+}
+
+
 int context_get_stack_size(ExecutionContext* c) {
   Stack *s = c->stack;
   StackElement *element = s->base;
@@ -448,7 +459,7 @@ int context_get_stack_size(ExecutionContext* c) {
       size_stack += 8;
     }
   }
-  return size_stack;
+  return  _verifica_alinhamento(size_stack);
 }
 
 
