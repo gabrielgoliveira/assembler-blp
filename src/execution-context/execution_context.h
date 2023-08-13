@@ -6,6 +6,7 @@
 typedef struct {
   int *var_int_stack_index;   // Array de indice da variavel de pilha 
   int *var_int_reg_index;     // Array de indice de variavel de registrador
+  int *arr_int_size;          // Guarda o tamanho do array
   int *arr_int_index;         // Array de indices de arrays
   int *reg_params;            // Array de parametros, cada posicao guarda o tamanho 4 ou 8
   int init;                   // Se a estrutura foi iniciada
