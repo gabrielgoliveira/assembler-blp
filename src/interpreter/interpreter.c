@@ -322,8 +322,8 @@ int recognize_line(ExecutionContext *c, char *line) {
     printf("\n\nmovslq $%s, %%rcx\n", pegar_constante_array);
     printf("imulq $4, %%rcx\n");
     printf("leaq %s, %%rcx\n", pegar_array_pilha);
-    printf("movl (%%rcx), %%rax\n");
-    printf("movl %%rax, %s\n\n", pegar_destino_pilha); //vi3 = va2[3]
+    printf("movl (%%rcx), %%eax\n");
+    printf("movl %%eax, %s\n\n", pegar_destino_pilha); //vi3 = va2[3]
   }
 
   r = sscanf(line, "set %ca%d index ci%d with %s", &tipo_da_variavel, &num_da_variavel, &num_do_index, variavel_destino);
