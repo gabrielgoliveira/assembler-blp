@@ -15,5 +15,5 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # Regra para limpar arquivos objeto e o executável
-clean:
+clear:
 	rm -f $(OBJECTS) $(EXECUTABLE)
