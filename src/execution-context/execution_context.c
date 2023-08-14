@@ -542,7 +542,7 @@ void context_save(ExecutionContext* c, int *count) {
       element = s->top;
       if(c->reg_params[i] < 8) {
         // imprime a operacao de salvar o registrador na pilha
-        nomes_registradores[i][0] = 'e';
+        // nomes_registradores[i][0] = 'e';
         printf("movq %%%s, -%d(%%rbp)\n", nomes_registradores[i], element->pos_stack);
 
       } else {
