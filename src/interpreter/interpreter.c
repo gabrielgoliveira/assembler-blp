@@ -205,7 +205,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       else if(atr_c3 == 'p'){
         sprintf(parametro, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("movl %s, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", parametro_value2, registrador_pilha);
+        printf("movl %%%s, %%ecx\nmovl %s, %%eax\ncltd\nidivl %%ecx\n", parametro_value2, registrador_pilha);
         printf("movl %%eax, %s\n", registrador_pilha);
       }else{
         sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
