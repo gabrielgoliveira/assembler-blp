@@ -259,7 +259,7 @@ int recognize_line(ExecutionContext *c, char *line) {
             "cmpl %s, $%s\n":
             if_segundo[0] == 'c'?
             "cmpl $%s, %s\n" :
-            "cmpl %s, %s\n", registrador_pilha2, registrador_pilha);
+            "movl %s, %%ecx\ncmpl %%ecx, %s\n", registrador_pilha2, registrador_pilha);
     if(!strcmp(comparacao, "eq")){
       printf("jne end_if");
     }
