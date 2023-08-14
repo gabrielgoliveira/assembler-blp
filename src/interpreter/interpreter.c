@@ -260,8 +260,7 @@ int recognize_line(ExecutionContext *c, char *line) {
               if_segundo[0] == 'c'?
               "cmpl $%s, %s\n" :
               "cmpl %%%s, %s\n", registrador_pilha2, registrador_pilha);
-    } else 
-    if(!strncmp(registrador_pilha,"edi",3) || !strncmp(registrador_pilha,"esi",3) || !strncmp(registrador_pilha,"edx",3)) {
+    } else if(!strncmp(registrador_pilha,"edi",3) || !strncmp(registrador_pilha,"esi",3) || !strncmp(registrador_pilha,"edx",3)) {
       printf(if_primeiro[0] == 'c' && if_segundo[0] == 'c'?
               "cmpl $%s, $%s\n":
               if_primeiro[0] == 'c'?
