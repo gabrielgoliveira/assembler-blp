@@ -6,9 +6,9 @@ var vi5
 reg vr6
 enddef
 
-vi5 = pi1
+vr4 = vr6
 
-if vi5 gt pi1
+if vi5 gt vr6
 vr6 = vr4 - vi5
 endif
 

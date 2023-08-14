@@ -252,30 +252,56 @@ int recognize_line(ExecutionContext *c, char *line) {
     char registrador_pilha2[10] = "";
     context_get(c, if_primeiro, registrador_pilha);
     context_get(c, if_segundo, registrador_pilha2);
-
-    printf(if_primeiro[0] == 'c' && if_segundo[0] == 'c'?
-            "cmpl $%s, $%s\n":
-            if_primeiro[0] == 'c'?
-            "cmpl %s, $%s\n":
-            if_segundo[0] == 'c'?
-            "cmpl $%s, %s\n" :
-            "cmpl %s, %s\n", registrador_pilha2, registrador_pilha);
-    if(!strcmp(comparacao, "eq")){
+    if(!strncmp(registrador_pilha2,"edi",3) || !strncmp(registrador_pilha2,"esi",3) || !strncmp(registrador_pilha2,"edx",3)){
+      printf(if_primeiro[0] == 'c' && if_segundo[0] == 'c'?
+              "cmpl $%s, $%s\n":
+              if_primeiro[0] == 'c'?
+              "cmpl %%%s, $%s\n":
+              if_segundo[0] == 'c'?
+              "cmpl $%s, %s\n" :
+              "cmpl %%%s, %s\n", registrador_pilha2, registrador_pilha);
+    } else 
+    if(!strncmp(registrador_pilha,"edi",3) || !strncmp(registrador_pilha,"esi",3) || !strncmp(registrador_pilha,"edx",3)) {
+      printf(if_primeiro[0] == 'c' && if_segundo[0] == 'c'?
+              "cmpl $%s, $%s\n":
+              if_primeiro[0] == 'c'?
+              "cmpl %s, $%s\n":
+              if_segundo[0] == 'c'?
+              "cmpl $%s, %%%s\n" :
+              "cmpl %s, %%%s\n", registrador_pilha2, registrador_pilha);
+    }else if((!strncmp(registrador_pilha,"edi",3) || !strncmp(registrador_pilha,"esi",3) || !strncmp(registrador_pilha,"edx",3)) && (!strncmp(registrador_pilha2,"edi",3) || !strncmp(registrador_pilha2,"esi",3) || !strncmp(registrador_pilha2,"edx",3))){
+      printf(if_primeiro[0] == 'c' && if_segundo[0] == 'c'?
+              "cmpl $%s, $%s\n":
+              if_primeiro[0] == 'c'?
+              "cmpl %%%s, $%s\n":
+              if_segundo[0] == 'c'?
+              "cmpl $%s, %%%s\n" :
+              "cmpl %%%s, %%%s\n", registrador_pilha2, registrador_pilha);
+    } else {
+      printf(if_primeiro[0] == 'c' && if_segundo[0] == 'c'?
+              "cmpl $%s, $%s\n":
+              if_primeiro[0] == 'c'?
+              "cmpl %s, $%s\n":
+              if_segundo[0] == 'c'?
+              "cmpl $%s, %s\n" :
+              "cmpl %s, %s\n", registrador_pilha2, registrador_pilha);
+    }
+    if(!strncmp(comparacao, "eq",2)){
       printf("jne end_if");
     }
-    if(!strcmp(comparacao, "ne")){
+    if(!strncmp(comparacao, "ne",2)){
       printf("je end_if");
     }
-    if(!strcmp(comparacao, "lt")){
+    if(!strncmp(comparacao, "lt",2)){
       printf("jge end_if");
     }
-    if(!strcmp(comparacao, "le")){
+    if(!strncmp(comparacao, "le",2)){
       printf("jg end_if");
     }
-    if(!strcmp(comparacao, "gt")){
+    if(!strncmp(comparacao, "gt",2)){
       printf("jle end_if");
     }
-    if(!strcmp(comparacao, "ge")){
+    if(!strncmp(comparacao, "ge",2)){
       printf("jl end_if");
     }
     contador_ifs++;
