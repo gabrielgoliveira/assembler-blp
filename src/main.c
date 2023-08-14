@@ -105,6 +105,7 @@ int main() {
     }
 
     int r = -1;
+    // printf("=====> line: %s\n", line);
     r = recognize_line(&context, line);
 
     // if(!flag && r == -1) {

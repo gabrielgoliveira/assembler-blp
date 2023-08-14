@@ -3,7 +3,7 @@
 Para compilar :
 
 ```
-gcc src/main.c src/stack/stack.c src/execution-context/execution_context.c src/interpreter/interpreter.c -o tradutor
+gcc -g src/main.c src/stack/stack.c src/execution-context/execution_context.c src/interpreter/interpreter.c -o tradutor
 ```
 
 ou 
