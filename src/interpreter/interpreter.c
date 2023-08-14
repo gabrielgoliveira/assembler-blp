@@ -51,7 +51,7 @@ int recognize_line(ExecutionContext *c, char *line) {
         // printf("## %s\n", parametro);
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, parametro, parametro_value);
-        printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
+        printf("movl %s, %s\n", parametro_value, registrador_pilha);
         return 1;
       }else {
         //variavel inteira
@@ -368,7 +368,7 @@ void print_att_params(ExecutionContext *c, char *param, int index) {
       printf("ERRO: VARIAVEL NAO LOCALIZADA !!!!! [%s]\n", param);
       return ;
     }
-    printf("movq -%d(%%rbp), %%%s\n", pos_stack, reg_params_name[index-1]);
+    printf("movq -%d(%%rbp), %s\n", pos_stack, reg_params_name[index-1]);
   }
 }
 
@@ -380,11 +380,11 @@ void context_recover(ExecutionContext *c, int count) {
     
     switch (element->type) {
       case ID_TYPE_PARAMS:
-        printf("movq -%d(%%rbp), %%%s\n", element->pos_stack, reg_params_name[element->index_array]);
+        printf("movq -%d(%%rbp), %s\n", element->pos_stack, reg_params_name[element->index_array]);
         break;
       
       case ID_TYPE_VAR_LOCAL_REG:
-        printf("movq -%d(%%rbp), %%%s\n", element->pos_stack, nomes_regs_var[element->index_array]);
+        printf("movq -%d(%%rbp), %s\n", element->pos_stack, nomes_regs_var[element->index_array]);
         break;
 
       default:
