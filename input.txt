@@ -1,24 +1,19 @@
 function f3 pi1 pi2
 def
 vet va3 size ci10
-reg vr4
+var vi4
 var vi5
 reg vr6
 enddef
 
-vr4 = vr6
 
-if vi5 gt vr6
-vr6 = vr4 - vi5
+
+if vi5 gt vi4
+
 endif
 
 get va3 index ci2 to vi5 
 set va3 index ci2 with vi5
-
-
-
-
-vi5 = call f2 vr4 pi1
 
 vi5 = pi1
 
