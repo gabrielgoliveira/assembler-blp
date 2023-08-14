@@ -252,22 +252,22 @@ int recognize_line(ExecutionContext *c, char *line) {
             "cmpl $%s, %s\n" :
             "cmpl %s, %s\n", registrador_pilha2, registrador_pilha);
     if(!strcmp(comparacao, "eq")){
-      printf("jne end_inf");
+      printf("jne end_if");
     }
     if(!strcmp(comparacao, "ne")){
-      printf("je end_inf");
+      printf("je end_if");
     }
     if(!strcmp(comparacao, "lt")){
-      printf("jge end_inf");
+      printf("jge end_if");
     }
     if(!strcmp(comparacao, "le")){
-      printf("jg end_inf");
+      printf("jg end_if");
     }
     if(!strcmp(comparacao, "gt")){
-      printf("jle end_inf");
+      printf("jle end_if");
     }
     if(!strcmp(comparacao, "ge")){
-      printf("jl end_inf");
+      printf("jl end_if");
     }
     contador_ifs++;
     printf("%d\n", contador_ifs);
