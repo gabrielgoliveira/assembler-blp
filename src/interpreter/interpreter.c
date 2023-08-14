@@ -319,6 +319,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     context_get(c, variavel_destino, pegar_destino_pilha);
     context_get(c, constante_array, pegar_constante_array);
 
+
     printf("\n\nmovslq $%s, %%rcx\n", pegar_constante_array);
     printf("imulq $4, %%rcx\n");
     printf("leaq %s, %%rcx\n", pegar_array_pilha);
