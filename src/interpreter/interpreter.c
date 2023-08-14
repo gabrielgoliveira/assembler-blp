@@ -51,7 +51,7 @@ int recognize_line(ExecutionContext *c, char *line) {
         // printf("## %s\n", parametro);
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, parametro, parametro_value);
-        printf("movl %s, %s\n", parametro_value, registrador_pilha);
+        printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
         return 1;
       }else {
         //variavel inteira
@@ -89,7 +89,7 @@ int recognize_line(ExecutionContext *c, char *line) {
         printf("## %s\n", parametro);
         context_get(c, variavel_pilha, registrador_pilha);
         context_get(c, parametro, parametro_value);
-        printf("movl %s, %s\n", parametro_value, registrador_pilha);
+        printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
         return 1;
       }else {
         //variavel inteira
@@ -143,7 +143,7 @@ int recognize_line(ExecutionContext *c, char *line) {
     else if(atr_c1 == 'p'){
       sprintf(parametro, "pi%d", atr_i1);
       context_get(c, parametro, parametro_value);
-      printf("movl %s, %s\n", parametro_value, registrador_pilha);
+      printf("movl %%%s, %s\n", parametro_value, registrador_pilha);
     }else{
       sprintf(registrador, "v%c%d", atr_c2, atr_i1);
       context_get(c, registrador, registrador_value);
@@ -158,7 +158,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       else if(atr_c3 == 'p'){
         sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("addl %s, %s\n", parametro_value2, registrador_pilha);
+        printf("addl %%%s, %s\n", parametro_value2, registrador_pilha);
       }else{
         sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
         context_get(c, registrador2, registrador_value2);
@@ -174,7 +174,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       else if(atr_c3 == 'p'){
         sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("subl %s, %s\n", parametro_value2, registrador_pilha);
+        printf("subl %%%s, %s\n", parametro_value2, registrador_pilha);
       }else{
         sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
         context_get(c, registrador2, registrador_value2);
@@ -190,7 +190,7 @@ int recognize_line(ExecutionContext *c, char *line) {
       else if(atr_c3 == 'p'){
         sprintf(parametro2, "pi%d", atr_i2);
         context_get(c, parametro2, parametro_value2);
-        printf("imull %s, %s\n", parametro_value2, registrador_pilha);
+        printf("imull %%%s, %s\n", parametro_value2, registrador_pilha);
       }else{
         sprintf(registrador2, "v%c%d", atr_c4, atr_i2);
         context_get(c, registrador2, registrador_value2);
@@ -368,7 +368,7 @@ void print_att_params(ExecutionContext *c, char *param, int index) {
       printf("ERRO: VARIAVEL NAO LOCALIZADA !!!!! [%s]\n", param);
       return ;
     }
-    printf("movq -%d(%%rbp), %s\n", pos_stack, reg_params_name[index-1]);
+    printf("movq -%d(%%rbp), %%%s\n", pos_stack, reg_params_name[index-1]);
   }
 }
 
