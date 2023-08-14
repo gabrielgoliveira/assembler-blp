@@ -196,7 +196,7 @@ void context_get(ExecutionContext* c, char *str, char *dest) {
         return ;
       } else {
 
-        names_regs_params[i][0] = 'e';
+        // names_regs_params[i][0] = 'e';
         strcpy(dest, names_regs_params[i]);
         return ;
       }
