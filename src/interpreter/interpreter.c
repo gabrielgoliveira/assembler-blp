@@ -8,7 +8,7 @@
 #include <stdint.h>
 
 int contador_ifs = 0;
-void chamada_de_funcao(ExecutionContext *c, char *p1);
+
 int if_call_function(ExecutionContext *c, char *line);
 char reg_params_name[][4] = {"rdi", "rsi", "rdx"};
 char nomes_regs_var[][4] = {"r11", "r10", "r9", "r8"};
@@ -326,8 +326,8 @@ int recognize_line(ExecutionContext *c, char *line) {
     printf("\n\nmovslq $%s, %%rcx\n", pegar_constante_array);
     printf("imulq $4, %%rcx\n");
     printf("leaq %s, %%rcx\n", pegar_array_pilha);
-    printf("movl (%%rcx), %%rax\n");
-    printf("movl %%rax, %s\n\n", pegar_destino_pilha); //vi3 = va2[3]
+    printf("movl (%%rcx), %%eax\n");
+    printf("movl %%eax, %s\n\n", pegar_destino_pilha); //vi3 = va2[3]
   }
 
   r = sscanf(line, "set %ca%d index ci%d with %s", &tipo_da_variavel, &num_da_variavel, &num_do_index, variavel_destino);
@@ -342,25 +342,13 @@ int recognize_line(ExecutionContext *c, char *line) {
     printf("\n\nmovslq $%s, %%rcx\n", pegar_constante_array);
     printf("imulq $4, %%rcx\n");
     printf("leaq %s, %%rcx\n", pegar_array_pilha);
-    printf("movl %s, %%rax\n", pegar_destino_pilha);
-    printf("movl %%rax, (%%rcx)\n\n", pegar_destino_pilha); //va2[3] = vi3
+    printf("movl %s, %%eax\n", pegar_destino_pilha);
+    printf("movl %%eax, (%%rcx)\n\n", pegar_destino_pilha); //va2[3] = vi3
   }
 
   return -1;
 }
 
-void chamada_de_funcao(ExecutionContext *c, char *p1){
-  char registrador_constante[10] = "";
-  
-  if(p1[0] == 'c'){
-    context_get(c, p1, registrador_constante);
-    printf("movl $%s, ", registrador_constante);
-    return;
-  }
-
-  context_get(c, p1, registrador_constante);
-  printf("movl %s, ", registrador_constante);
-}
 
 // imprimir atribuicao de parametros para os registradores
 void print_att_params(ExecutionContext *c, char *param, int index) {
