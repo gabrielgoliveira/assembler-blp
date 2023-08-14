@@ -380,11 +380,11 @@ void context_recover(ExecutionContext *c, int count) {
     
     switch (element->type) {
       case ID_TYPE_PARAMS:
-        printf("mov -%d(%%rbp), %s\n", element->pos_stack, reg_params_name[element->index_array]);
+        printf("movq -%d(%%rbp), %%%s\n", element->pos_stack, reg_params_name[element->index_array]);
         break;
       
       case ID_TYPE_VAR_LOCAL_REG:
-        printf("mov -%d(%%rbp), %s\n", element->pos_stack, nomes_regs_var[element->index_array]);
+        printf("movq -%d(%%rbp), %%%s\n", element->pos_stack, nomes_regs_var[element->index_array]);
         break;
 
       default:
